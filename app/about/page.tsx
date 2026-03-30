@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { siteConfig } from '@/lib/site';
+import { createBilingualPageMetadata } from '@/lib/seo';
 import { certifications, courses, education } from '@/data';
 import Image from 'next/image';
 
@@ -15,44 +16,22 @@ import {
   FaSuitcase,
 } from 'react-icons/fa6';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createBilingualPageMetadata({
   title: 'About | Abdulrahman Moussa',
-  description:
+  path: '/about',
+  descriptionEn:
     'Learn about Abdulrahman Moussa: frontend engineering background, certifications, courses, education, and design-first development philosophy.',
-  alternates: {
-    canonical: '/about',
-  },
-  openGraph: {
-    title: 'About | Abdulrahman Moussa',
-    description:
-      'Frontend engineer profile, certifications, education history, and continuous learning journey.',
-    url: `${siteConfig.url}/about`,
-    images: [siteConfig.ogImages.about],
-    siteName: siteConfig.name,
-    type: 'profile',
-    locale: 'en_US',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'About | Abdulrahman Moussa',
-    description:
-      'Frontend engineer profile, certifications, education history, and continuous learning journey.',
-    images: [siteConfig.ogImages.about],
-  },
+  descriptionAr:
+    'تعرف على عبدالرحمن موسى وخلفيته في تطوير الواجهات الأمامية، الشهادات، التعليم، وفلسفة العمل التي تركز على الجودة والتجربة.',
+  ogImage: siteConfig.ogImages.about,
+  type: 'profile',
   keywords: [
-    'Abdulrahman Moussa',
     'Frontend Developer Egypt',
-    'React Developer',
-    'Next.js Developer',
     'Software Engineering Certifications',
+    'السيرة الذاتية',
+    'شهادات تطوير الويب',
   ],
-  other: {
-    'geo.region': 'EG-C',
-    'geo.placename': 'Cairo',
-    'geo.position': '30.0444;31.2357',
-    ICBM: '30.0444, 31.2357',
-  },
-};
+});
 
 const coreSkills = [
   'React & Next.js Architecture',

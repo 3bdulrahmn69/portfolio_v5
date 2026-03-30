@@ -1,37 +1,25 @@
 import type { Metadata } from 'next';
 import { siteConfig } from '@/lib/site';
+import { createBilingualPageMetadata } from '@/lib/seo';
 
 import Container from '@/components/layout/container';
 import ContactDetails from '@/components/contact/contact-details';
 import ContactForm from '@/components/contact/contact-form';
 
-export const metadata: Metadata = {
-  title: 'Contact',
-  description:
+export const metadata: Metadata = createBilingualPageMetadata({
+  title: 'Contact | Abdulrahman Moussa',
+  path: '/contact',
+  descriptionEn:
     'Get in touch with Abdulrahman Moussa for frontend development, project collaboration, and product engineering work.',
-  alternates: {
-    canonical: '/contact',
-  },
-  openGraph: {
-    title: 'Contact | Abdulrahman Moussa',
-    description:
-      'Get in touch with Abdulrahman Moussa for frontend development, project collaboration, and product engineering work.',
-    url: `${siteConfig.url}/contact`,
-    images: [siteConfig.ogImages.home],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Contact | Abdulrahman Moussa',
-    description:
-      'Get in touch with Abdulrahman Moussa for frontend development, project collaboration, and product engineering work.',
-    images: [siteConfig.ogImages.home],
-  },
-  other: {
-    'geo.region': 'EG-C',
-    'geo.placename': 'Cairo',
-  },
-};
+  descriptionAr:
+    'تواصل مع عبدالرحمن موسى لفرص العمل في تطوير الواجهات الأمامية، تنفيذ المشاريع، والتعاون المهني.',
+  ogImage: siteConfig.ogImages.home,
+  keywords: [
+    'Hire Frontend Developer',
+    'Contact Developer',
+    'توظيف مطور واجهات',
+  ],
+});
 
 export default function ContactPage() {
   return (

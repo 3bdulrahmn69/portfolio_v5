@@ -1,34 +1,26 @@
 import type { Metadata } from 'next';
 import { siteConfig } from '@/lib/site';
+import { createBilingualPageMetadata } from '@/lib/seo';
 import Hero from '@/components/landing/hero';
 import About from '@/components/landing/about';
 import TechStack from '@/components/landing/tech-stack';
 import Projects from '@/components/landing/projects';
 import ContactCTA from '@/components/landing/contact-cta';
 
-export const metadata: Metadata = {
-  title: 'Abdulrahman Moussa | Frontend Developer',
-  description:
+export const metadata: Metadata = createBilingualPageMetadata({
+  title: siteConfig.title,
+  path: '/',
+  descriptionEn:
     'Frontend developer portfolio for Abdulrahman Moussa with selected projects, technical stack, and contact details.',
-  alternates: {
-    canonical: '/',
-  },
-  openGraph: {
-    title: siteConfig.title,
-    description:
-      'Frontend developer portfolio for Abdulrahman Moussa with selected projects, technical stack, and contact details.',
-    url: siteConfig.url,
-    images: [siteConfig.ogImages.home],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: siteConfig.title,
-    description:
-      'Frontend developer portfolio for Abdulrahman Moussa with selected projects, technical stack, and contact details.',
-    images: [siteConfig.ogImages.home],
-  },
-};
+  descriptionAr:
+    'معرض أعمال لعبدالرحمن موسى يضم المشاريع المختارة، التقنيات المستخدمة، وطرق التواصل.',
+  ogImage: siteConfig.ogImages.home,
+  keywords: [
+    'Frontend Portfolio',
+    'Personal Website',
+    'Modern Web Development',
+  ],
+});
 
 export default function Home() {
   return (

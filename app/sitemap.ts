@@ -9,24 +9,48 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 1,
+      alternates: {
+        languages: {
+          'en-US': siteConfig.url,
+          'ar-EG': siteConfig.url,
+        },
+      },
     },
     {
       url: `${siteConfig.url}/about`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.9,
+      alternates: {
+        languages: {
+          'en-US': `${siteConfig.url}/about`,
+          'ar-EG': `${siteConfig.url}/about`,
+        },
+      },
     },
     {
       url: `${siteConfig.url}/projects`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.95,
+      alternates: {
+        languages: {
+          'en-US': `${siteConfig.url}/projects`,
+          'ar-EG': `${siteConfig.url}/projects`,
+        },
+      },
     },
     {
       url: `${siteConfig.url}/contact`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.9,
+      alternates: {
+        languages: {
+          'en-US': `${siteConfig.url}/contact`,
+          'ar-EG': `${siteConfig.url}/contact`,
+        },
+      },
     },
   ];
 
@@ -36,6 +60,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
+      alternates: {
+        languages: {
+          'en-US': `${siteConfig.url}/projects/${project.slug}`,
+          'ar-EG': `${siteConfig.url}/projects/${project.slug}`,
+        },
+      },
     }),
   );
 

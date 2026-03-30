@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { siteConfig } from '@/lib/site';
+import { createBilingualDescription, createLocaleAlternates } from '@/lib/seo';
 import { notFound } from 'next/navigation';
 import { StaticImageData } from 'next/image';
 import { projects, works } from '@/data';
@@ -48,27 +49,54 @@ export async function generateMetadata({
   }
 
   const shareImage = toAbsoluteImageUrl(project.gallery?.[0] || project.image);
+  const generatedOgImage = `${siteConfig.url}/projects/${project.slug}/opengraph-image`;
+  const englishDescription = project.description;
+  const arabicDescription = `تفاصيل مشروع ${project.title}، التقنيات المستخدمة، الروابط، وأهم النتائج.`;
+  const description = createBilingualDescription(
+    englishDescription,
+    arabicDescription,
+  );
 
   return {
     title: `${project.title} | Projects`,
-    description: project.description,
-    alternates: {
-      canonical: `/projects/${project.slug}`,
-    },
+    description,
+    alternates: createLocaleAlternates(`/projects/${project.slug}`),
     openGraph: {
       title: `${project.title} | Abdulrahman Moussa`,
-      description: project.description,
+      description,
       url: `${siteConfig.url}/projects/${project.slug}`,
-      images: [shareImage],
+      locale: 'en_US',
+      alternateLocale: 'ar_EG',
+      images: [
+        {
+          url: generatedOgImage,
+          width: 1200,
+          height: 630,
+          alt: `${project.title} preview card`,
+        },
+        {
+          url: shareImage,
+          width: 1200,
+          height: 630,
+          alt: `${project.title} screenshot`,
+        },
+      ],
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
       title: `${project.title} | Abdulrahman Moussa`,
-      description: project.description,
-      images: [shareImage],
+      description,
+      images: [generatedOgImage],
     },
-    keywords: project.tags,
+    keywords: [...project.tags, 'مشروع برمجي', 'تفاصيل المشروع'],
+    other: {
+      'geo.region': 'EG-C',
+      'geo.placename': 'Cairo',
+      'geo.position': '30.0444;31.2357',
+      ICBM: '30.0444, 31.2357',
+      'content-language': 'en, ar',
+    },
   };
 }
 

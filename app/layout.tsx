@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { siteConfig } from '@/lib/site';
+import { createLocaleAlternates } from '@/lib/seo';
 import { Outfit, Roboto_Mono } from 'next/font/google';
 
 import './globals.css';
@@ -23,11 +24,10 @@ export const metadata: Metadata = {
     default: siteConfig.title,
     template: '%s | Abdulrahman Moussa',
   },
-  description: siteConfig.description,
+  description:
+    'Clean and elegant portfolio showcasing frontend engineering work, projects, certifications, and practical product experience. | معرض أعمال احترافي لعرض مشاريع تطوير الواجهات الأمامية والخبرة العملية بشكل واضح وسهل.',
   applicationName: siteConfig.name,
-  alternates: {
-    canonical: '/',
-  },
+  alternates: createLocaleAlternates('/'),
   keywords: [
     'Abdulrahman Moussa',
     'Frontend Developer',
@@ -35,6 +35,10 @@ export const metadata: Metadata = {
     'Next.js Portfolio',
     'TypeScript',
     'UI Engineering',
+    'مطور واجهات أمامية',
+    'مطور React',
+    'بورتفوليو',
+    'تطوير مواقع',
   ],
   authors: [{ name: siteConfig.name, url: siteConfig.url }],
   creator: siteConfig.name,
@@ -47,6 +51,7 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     type: 'website',
     locale: 'en_US',
+    alternateLocale: 'ar_EG',
     images: [
       {
         url: siteConfig.ogImages.home,
@@ -78,7 +83,34 @@ export const metadata: Metadata = {
     'geo.placename': 'Cairo',
     'geo.position': '30.0444;31.2357',
     ICBM: '30.0444, 31.2357',
+    'content-language': 'en, ar',
   },
+};
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: siteConfig.name,
+  url: siteConfig.url,
+  inLanguage: ['en', 'ar'],
+  description:
+    'Frontend developer portfolio with selected projects, technical stack, and contact channels.',
+};
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: siteConfig.name,
+  jobTitle: 'Frontend Developer',
+  url: siteConfig.url,
+  email: `mailto:${siteConfig.email}`,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Cairo',
+    addressCountry: 'EG',
+  },
+  knowsLanguage: ['en', 'ar'],
+  sameAs: siteConfig.socialLinks.map((link) => link.href),
 };
 
 export default function RootLayout({
@@ -94,6 +126,14 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         <Navbar />
         <main className="flex-1 flex flex-col">{children}</main>
         <GoToTop />

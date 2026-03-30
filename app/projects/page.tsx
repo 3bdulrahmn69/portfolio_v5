@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { siteConfig } from '@/lib/site';
+import { createBilingualPageMetadata } from '@/lib/seo';
 import { projects, works } from '@/data';
 
 import Button from '@/components/ui/button';
@@ -14,35 +15,22 @@ import {
   FaUser,
 } from 'react-icons/fa6';
 
-export const metadata: Metadata = {
-  title: 'Projects',
-  description:
+export const metadata: Metadata = createBilingualPageMetadata({
+  title: 'Projects | Abdulrahman Moussa',
+  path: '/projects',
+  descriptionEn:
     'Explore selected frontend and full-stack projects by Abdulrahman Moussa, including production work and personal builds.',
-  alternates: {
-    canonical: '/projects',
-  },
-  openGraph: {
-    title: 'Projects | Abdulrahman Moussa',
-    description:
-      'Explore selected frontend and full-stack projects by Abdulrahman Moussa, including production work and personal builds.',
-    url: `${siteConfig.url}/projects`,
-    images: [siteConfig.ogImages.projects],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Projects | Abdulrahman Moussa',
-    description:
-      'Explore selected frontend and full-stack projects by Abdulrahman Moussa, including production work and personal builds.',
-    images: [siteConfig.ogImages.projects],
-  },
+  descriptionAr:
+    'استعرض مشاريع عبدالرحمن موسى في تطوير الواجهات الأمامية والتطبيقات الكاملة، بما يشمل أعمال احترافية ومشاريع شخصية.',
+  ogImage: siteConfig.ogImages.projects,
   keywords: [
     'Frontend Projects',
     'React Projects',
     'Next.js Projects',
     'Portfolio Projects',
+    'مشاريع تطوير واجهات',
   ],
-};
+});
 
 export default function ProjectsPage() {
   const allProjects = [...works, ...projects];
