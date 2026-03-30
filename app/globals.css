@@ -1,0 +1,71 @@
+@import 'tailwindcss';
+
+:root {
+  --background: #06070a;
+  --foreground: #f2f4f8;
+  --color-background: #06070a;
+  --color-foreground: #f2f4f8;
+  --color-soft: #c4c8d0;
+  --color-muted: #8e96a6;
+  --color-accent: #f8c369;
+  --color-accent-soft: #fdd995;
+}
+
+@theme inline {
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-soft: var(--color-soft);
+  --color-muted: var(--color-muted);
+  --color-accent: var(--color-accent);
+  --color-accent-soft: var(--color-accent-soft);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background:
+    radial-gradient(
+      circle at 12% 18%,
+      rgba(53, 89, 150, 0.16),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 88% 85%,
+      rgba(240, 189, 106, 0.1),
+      transparent 35%
+    ),
+    var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), 'Segoe UI', sans-serif;
+}
+
+.noise-bg {
+  position: relative;
+}
+
+.noise-bg::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.18) 0.55px,
+    transparent 0.55px
+  );
+  background-size: 1.5px 1.5px;
+  mix-blend-mode: soft-light;
+}
+
+.marquee-track {
+  animation: marquee 36s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
