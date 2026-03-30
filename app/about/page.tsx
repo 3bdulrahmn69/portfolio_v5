@@ -93,8 +93,29 @@ const hobbyHoverStyles = [
 ];
 
 export default function AboutPage() {
+  const profileJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    dateCreated: '2025-01-01T00:00:00+00:00',
+    dateModified: new Date().toISOString(),
+    mainEntity: {
+      '@type': 'Person',
+      name: siteConfig.name,
+      alternateName: 'عبدالرحمن موسى',
+      jobTitle: 'Frontend Developer',
+      description:
+        'Frontend developer who loves creating responsive and user-friendly web interfaces.',
+      image: `${siteConfig.url}/og-about.jpg`,
+      sameAs: siteConfig.socialLinks.map((link) => link.href),
+    },
+  };
+
   return (
     <div className="flex flex-col items-center bg-background w-full relative overflow-hidden pt-32 pb-40">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(profileJsonLd) }}
+      />
       <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[150px] opacity-30 pointer-events-none" />
       <div className="absolute top-[40%] left-[-10%] w-[40%] h-[40%] bg-accent/10 rounded-full blur-[150px] opacity-30 pointer-events-none" />
 

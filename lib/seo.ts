@@ -92,6 +92,8 @@ export function createBilingualPageMetadata({
       title,
       description,
       images: [ogImage],
+      site: '@3bdulrahmn69',
+      creator: '@3bdulrahmn69',
     },
     other: GEO_META,
   };

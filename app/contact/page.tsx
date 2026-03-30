@@ -22,8 +22,26 @@ export const metadata: Metadata = createBilingualPageMetadata({
 });
 
 export default function ContactPage() {
+  const contactJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    mainEntity: {
+      '@type': 'Person',
+      name: siteConfig.name,
+      email: siteConfig.email,
+      telephone: siteConfig.phone,
+      jobTitle: 'Frontend Developer',
+      url: siteConfig.url,
+      sameAs: siteConfig.socialLinks.map((link) => link.href),
+    },
+  };
+
   return (
     <div className="flex flex-col items-center bg-background w-full relative overflow-hidden pt-28 pb-28">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactJsonLd) }}
+      />
       <div className="absolute top-[-15%] right-[-10%] w-[45%] h-[45%] bg-primary/10 rounded-full blur-[150px] opacity-40 pointer-events-none" />
       <div className="absolute bottom-[-20%] left-[-10%] w-[40%] h-[40%] bg-accent/10 rounded-full blur-[150px] opacity-40 pointer-events-none" />
 

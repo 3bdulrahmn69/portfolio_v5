@@ -49,7 +49,6 @@ export async function generateMetadata({
   }
 
   const shareImage = toAbsoluteImageUrl(project.gallery?.[0] || project.image);
-  const generatedOgImage = `${siteConfig.url}/projects/${project.slug}/opengraph-image`;
   const englishDescription = project.description;
   const arabicDescription = `تفاصيل مشروع ${project.title}، التقنيات المستخدمة، الروابط، وأهم النتائج.`;
   const description = createBilingualDescription(
@@ -69,12 +68,6 @@ export async function generateMetadata({
       alternateLocale: 'ar_EG',
       images: [
         {
-          url: generatedOgImage,
-          width: 1200,
-          height: 630,
-          alt: `${project.title} preview card`,
-        },
-        {
           url: shareImage,
           width: 1200,
           height: 630,
@@ -87,7 +80,7 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title: `${project.title} | Abdulrahman Moussa`,
       description,
-      images: [generatedOgImage],
+      images: [shareImage],
     },
     keywords: [...project.tags, 'مشروع برمجي', 'تفاصيل المشروع'],
     other: {
@@ -108,8 +101,41 @@ export default async function ProjectDetails({ params }: ProjectDetailsProps) {
     notFound();
   }
 
+  // JSON-LD structured data for SEO and AI agents
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareSourceCode',
+    name: project.title,
+    description: project.description,
+    image: toAbsoluteImageUrl(project.image),
+    dateCreated: project.year ? `${project.year}-01-01` : undefined,
+    programmingLanguage: project.techStack.join(', '),
+    ...(project.githubUrl && { codeRepository: project.githubUrl }),
+    ...(project.liveUrl && { url: project.liveUrl }),
+    ...(project.parts &&
+      project.parts.length > 0 && {
+        hasPart: project.parts.map((part) => ({
+          '@type': 'SoftwareApplication',
+          name: part.label,
+          ...(part.description && { description: part.description }),
+          ...(part.liveUrl && { url: part.liveUrl }),
+          ...(part.githubUrl && { codeRepository: part.githubUrl }),
+        })),
+      }),
+    author: {
+      '@type': 'Person',
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
+    keywords: project.tags?.join(', '),
+  };
+
   return (
     <div className="flex flex-col items-center bg-background w-full relative overflow-hidden pt-28 pb-32">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="absolute top-[-8%] right-[-8%] w-[42%] h-[42%] bg-primary/10 rounded-full blur-[150px] opacity-40 pointer-events-none" />
       <div className="absolute top-[45%] left-[-10%] w-[36%] h-[36%] bg-accent/10 rounded-full blur-[150px] opacity-40 pointer-events-none" />
 
