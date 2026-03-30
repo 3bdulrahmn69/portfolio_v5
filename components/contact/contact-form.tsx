@@ -1,90 +1,162 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
+import emailjs from '@emailjs/browser';
+import Button from '@/components/ui/button';
+import { siteConfig } from '@/lib/site';
 
-type Status = 'idle' | 'sending' | 'success';
-
-type ContactFormProps = {
-  compact?: boolean;
+type ContactFormState = {
+  name: string;
+  email: string;
+  message: string;
 };
 
-export function ContactForm({ compact = false }: ContactFormProps) {
-  const [status, setStatus] = useState<Status>('idle');
+const initialState: ContactFormState = {
+  name: '',
+  email: '',
+  message: '',
+};
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+export default function ContactForm() {
+  const [form, setForm] = useState<ContactFormState>(initialState);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  } | null>(null);
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setStatus('sending');
 
-    window.setTimeout(() => {
-      setStatus('success');
-      event.currentTarget.reset();
-    }, 550);
+    const serviceId = process.env.EMAILJS_SERVICE_ID;
+    const templateId = process.env.EMAILJS_TEMPLATE_ID;
+    const publicKey = process.env.EMAILJS_PUBLIC_KEY;
+
+    if (!serviceId || !templateId || !publicKey) {
+      setStatus({
+        type: 'error',
+        message:
+          'Contact form is not configured yet. Please set EmailJS environment variables.',
+      });
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      setStatus(null);
+
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name: form.name,
+          from_email: form.email,
+          message: form.message,
+          to_email: siteConfig.email,
+        },
+        { publicKey },
+      );
+
+      setStatus({
+        type: 'success',
+        message:
+          'Your message was sent successfully. I will get back to you soon.',
+      });
+      setForm(initialState);
+    } catch {
+      setStatus({
+        type: 'error',
+        message:
+          'Could not send your message right now. Please try again in a moment.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
     <form
-      onSubmit={handleSubmit}
-      className="space-y-4"
-      aria-label="Contact form"
+      onSubmit={onSubmit}
+      className="rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-xl space-y-5"
     >
-      <div className={compact ? 'grid gap-3' : 'grid gap-4 sm:grid-cols-2'}>
-        <label className="space-y-2">
-          <span className="text-xs uppercase tracking-[0.14em] text-muted">
-            Name
-          </span>
-          <input
-            type="text"
-            name="name"
-            required
-            className="w-full rounded-xl border border-white/15 bg-black/40 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-accent"
-            placeholder="Your name"
-          />
+      <div>
+        <label
+          htmlFor="name"
+          className="block text-sm font-semibold text-foreground mb-2"
+        >
+          Name
         </label>
-
-        <label className="space-y-2">
-          <span className="text-xs uppercase tracking-[0.14em] text-muted">
-            Email
-          </span>
-          <input
-            type="email"
-            name="email"
-            required
-            className="w-full rounded-xl border border-white/15 bg-black/40 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-accent"
-            placeholder="you@example.com"
-          />
-        </label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          required
+          autoComplete="name"
+          value={form.name}
+          onChange={(event) =>
+            setForm((prev) => ({ ...prev, name: event.target.value }))
+          }
+          className="w-full rounded-xl border border-input bg-background px-4 py-3 text-foreground outline-none transition-colors focus:border-primary"
+          placeholder="Your name"
+        />
       </div>
 
-      <label className="space-y-2 block">
-        <span className="text-xs uppercase tracking-[0.14em] text-muted">
+      <div>
+        <label
+          htmlFor="email"
+          className="block text-sm font-semibold text-foreground mb-2"
+        >
+          Email
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          autoComplete="email"
+          value={form.email}
+          onChange={(event) =>
+            setForm((prev) => ({ ...prev, email: event.target.value }))
+          }
+          className="w-full rounded-xl border border-input bg-background px-4 py-3 text-foreground outline-none transition-colors focus:border-primary"
+          placeholder="your@email.com"
+        />
+      </div>
+
+      <div>
+        <label
+          htmlFor="message"
+          className="block text-sm font-semibold text-foreground mb-2"
+        >
           Message
-        </span>
+        </label>
         <textarea
+          id="message"
           name="message"
           required
-          rows={compact ? 4 : 6}
-          className="w-full rounded-xl border border-white/15 bg-black/40 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-accent"
-          placeholder="Tell me about your project or idea"
+          rows={6}
+          value={form.message}
+          onChange={(event) =>
+            setForm((prev) => ({ ...prev, message: event.target.value }))
+          }
+          className="w-full rounded-xl border border-input bg-background px-4 py-3 text-foreground outline-none transition-colors focus:border-primary resize-y"
+          placeholder="Tell me about your project or idea..."
         />
-      </label>
+      </div>
 
-      <button
-        type="submit"
-        disabled={status === 'sending'}
-        className="rounded-full border border-accent bg-accent px-5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-black transition hover:bg-accent-soft disabled:opacity-60"
-      >
-        {status === 'sending' ? 'Sending...' : 'Send message'}
-      </button>
+      {status && (
+        <p
+          className={`text-sm font-medium ${
+            status.type === 'success' ? 'text-success' : 'text-destructive'
+          }`}
+        >
+          {status.message}
+        </p>
+      )}
 
-      <p
-        className="min-h-6 text-xs text-muted"
-        role="status"
-        aria-live="polite"
-      >
-        {status === 'success'
-          ? 'Thanks. Message captured in demo mode.'
-          : 'I usually reply within 24 hours.'}
-      </p>
+      <Button type="submit" variant="primary" size="md" disabled={isSubmitting}>
+        {isSubmitting ? 'Sending...' : 'Send Message'}
+      </Button>
     </form>
   );
 }

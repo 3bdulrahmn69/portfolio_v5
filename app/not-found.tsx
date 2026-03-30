@@ -1,19 +1,30 @@
-import Link from 'next/link';
+import Button from '@/components/ui/button';
+import { FaArrowLeft } from 'react-icons/fa6';
 
 export default function NotFound() {
   return (
-    <section className="mx-auto flex max-w-xl flex-col items-center gap-4 rounded-2xl border border-white/10 bg-white/2 px-6 py-12 text-center">
-      <p className="text-xs uppercase tracking-[0.2em] text-muted">404</p>
-      <h1 className="text-3xl font-semibold text-white">Page not found</h1>
-      <p className="text-sm leading-7 text-soft">
-        The page you are looking for does not exist or has moved.
+    <div className="flex flex-col items-center justify-center min-h-[80vh] bg-background text-center px-6">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vh] h-[60vh] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+
+      <h1 className="text-9xl font-black text-primary mb-6 animate-float">
+        404
+      </h1>
+      <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
+        Page Not Found
+      </h2>
+      <p className="text-lg text-muted-foreground max-w-md mb-10 leading-relaxed z-10">
+        I couldn&apos;t find the page you&apos;re looking for. It might have
+        been moved or doesn&apos;t exist.
       </p>
-      <Link
+
+      <Button
         href="/"
-        className="rounded-full border border-accent bg-accent px-5 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-black"
+        variant="primary"
+        size="lg"
+        className="font-bold text-lg shadow-xl z-10"
       >
-        Back Home
-      </Link>
-    </section>
+        <FaArrowLeft /> Return Home
+      </Button>
+    </div>
   );
 }

@@ -1,56 +1,101 @@
-import Link from 'next/link';
-import { FiExternalLink, FiMail, FiMapPin, FiPhone } from 'react-icons/fi';
+import { FaEnvelope, FaLocationDot, FaPhone } from 'react-icons/fa6';
 import { siteConfig } from '@/lib/site';
-import { SectionTitle } from '@/components/shared/section-title';
+import Button from '@/components/ui/button';
+import SocialLinks from '@/components/shared/social-links';
 
-export function ContactDetails() {
+type ContactDetailsProps = {
+  className?: string;
+};
+
+export default function ContactDetails({ className }: ContactDetailsProps) {
   return (
-    <section className="rounded-2xl border border-white/10 bg-white/2 p-6 sm:p-8">
-      <SectionTitle
-        eyebrow="Reach Out"
-        title="Contact details"
-        description="Open for freelance work, collaboration, and product development opportunities."
-      />
+    <div className={className}>
+      <div className="mb-5 rounded-2xl border border-border bg-card/80 p-4">
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          Prefer a quick message? Reach me by email, phone, or social channels.
+        </p>
+      </div>
 
-      <div className="space-y-5 text-sm text-soft">
-        <p className="flex items-center gap-3">
-          <FiMail className="text-accent" aria-hidden />
-          <a
-            href={`mailto:${siteConfig.email}`}
-            className="transition hover:text-white"
-          >
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <article className="rounded-2xl border border-border bg-card p-5 shadow-sm hover:shadow-lg hover:border-primary/40 transition-all">
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-primary">
+                <FaEnvelope />
+              </span>
+              <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                Email
+              </p>
+            </div>
+            <Button
+              href={`mailto:${siteConfig.email}`}
+              variant="outline"
+              size="sm"
+              className="shrink-0 whitespace-nowrap"
+            >
+              <FaEnvelope /> Send Email
+            </Button>
+          </div>
+          <p className="text-sm sm:text-base font-semibold text-foreground break-all leading-relaxed">
             {siteConfig.email}
-          </a>
-        </p>
-        <p className="flex items-center gap-3">
-          <FiPhone className="text-accent" aria-hidden />
-          <a
-            href={`tel:${siteConfig.phone.replace(/\s+/g, '')}`}
-            className="transition hover:text-white"
-          >
+          </p>
+        </article>
+
+        <article className="rounded-2xl border border-border bg-card p-5 shadow-sm hover:shadow-lg hover:border-primary/40 transition-all">
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-primary">
+                <FaPhone />
+              </span>
+              <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                Phone
+              </p>
+            </div>
+            <Button
+              href={`tel:${siteConfig.phone.replace(/\s+/g, '')}`}
+              variant="outline"
+              size="sm"
+              className="shrink-0 whitespace-nowrap"
+            >
+              <FaPhone /> Call
+            </Button>
+          </div>
+          <p className="text-sm sm:text-base font-semibold text-foreground">
             {siteConfig.phone}
-          </a>
-        </p>
-        <p className="flex items-center gap-3">
-          <FiMapPin className="text-accent" aria-hidden />
-          {siteConfig.location}
-        </p>
+          </p>
+        </article>
+
+        <article className="rounded-2xl border border-border bg-card p-5 shadow-sm hover:shadow-lg hover:border-primary/40 transition-all sm:col-span-2">
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-primary">
+                <FaLocationDot />
+              </span>
+              <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                Location
+              </p>
+            </div>
+            <Button
+              href="https://maps.google.com/?q=Cairo%2C%20Egypt"
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="outline"
+              size="sm"
+              className="shrink-0 whitespace-nowrap"
+            >
+              <FaLocationDot /> Open Map
+            </Button>
+          </div>
+          <p className="text-sm sm:text-base font-semibold text-foreground">
+            {siteConfig.location}
+          </p>
+          <p className="text-sm text-muted-foreground mt-2">
+            Available for remote and on-site work.
+          </p>
+        </article>
       </div>
 
-      <div className="mt-8 flex flex-wrap gap-3">
-        {siteConfig.socialLinks.map((social) => (
-          <Link
-            key={social.href}
-            href={social.href}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-xs uppercase tracking-[0.14em] text-soft transition hover:border-white/30 hover:text-white"
-          >
-            {social.label}
-            <FiExternalLink aria-hidden />
-          </Link>
-        ))}
-      </div>
-    </section>
+      <SocialLinks className="mt-5 rounded-2xl border border-border bg-card p-5 shadow-sm" />
+    </div>
   );
 }

@@ -1,17 +1,19 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import { SiteFooter } from '@/components/shared/site-footer';
-import { SiteHeader } from '@/components/shared/site-header';
 import { siteConfig } from '@/lib/site';
-import './globals.css';
+import { Outfit, Roboto_Mono } from 'next/font/google';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+import './globals.css';
+import Navbar from '@/components/layout/navbar';
+import GoToTop from '@/components/shared/go-to-top';
+import Footer from '@/components/layout/footer';
+
+const outfit = Outfit({
+  variable: '--font-sans',
   subsets: ['latin'],
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const robotoMono = Roboto_Mono({
+  variable: '--font-mono',
   subsets: ['latin'],
 });
 
@@ -19,31 +21,63 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
     default: siteConfig.title,
-    template: `%s | ${siteConfig.name}`,
+    template: '%s | Abdulrahman Moussa',
   },
   description: siteConfig.description,
+  applicationName: siteConfig.name,
+  alternates: {
+    canonical: '/',
+  },
   keywords: [
-    'frontend developer',
-    'portfolio',
-    'Next.js',
+    'Abdulrahman Moussa',
+    'Frontend Developer',
+    'React Developer',
+    'Next.js Portfolio',
     'TypeScript',
-    'web developer',
+    'UI Engineering',
   ],
-  authors: [{ name: siteConfig.name }],
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  category: 'technology',
   openGraph: {
     title: siteConfig.title,
     description: siteConfig.description,
     url: siteConfig.url,
     siteName: siteConfig.name,
-    images: [siteConfig.ogImages.home],
-    locale: 'en_US',
     type: 'website',
+    locale: 'en_US',
+    images: [
+      {
+        url: siteConfig.ogImages.home,
+        width: 1200,
+        height: 630,
+        alt: 'Abdulrahman Moussa portfolio homepage',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: siteConfig.title,
     description: siteConfig.description,
     images: [siteConfig.ogImages.home],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  other: {
+    'geo.region': 'EG-C',
+    'geo.placename': 'Cairo',
+    'geo.position': '30.0444;31.2357',
+    ICBM: '30.0444, 31.2357',
   },
 };
 
@@ -55,14 +89,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
+      className={`${outfit.variable} ${robotoMono.variable} h-full antialiased black`}
+      suppressHydrationWarning
     >
-      <body className="noise-bg min-h-full bg-background text-foreground">
-        <SiteHeader />
-        <main className="mx-auto w-full max-w-7xl flex-1 px-5 py-10 sm:px-8 sm:py-14">
-          {children}
-        </main>
-        <SiteFooter />
+      <body className="min-h-full flex flex-col bg-background text-foreground">
+        <Navbar />
+        <main className="flex-1 flex flex-col">{children}</main>
+        <GoToTop />
+        <Footer />
       </body>
     </html>
   );
