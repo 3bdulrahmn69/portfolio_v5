@@ -13,6 +13,7 @@ import {
   FaLaptopCode,
   FaUser,
 } from 'react-icons/fa6';
+import { siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = createBilingualPageMetadata({
   title: 'Projects by Abdulrahman Moussa | Next.js & React Developer',
@@ -55,7 +56,7 @@ export default function ProjectsPage() {
     name: 'Projects by Abdulrahman Moussa',
     description:
       'A curated collection of web development projects, featuring React, Next.js, and modern frontend architectures.',
-    url: 'https://3bdulrahmn.vercel.app/projects',
+    url: `${siteConfig.url}/projects`,
     mainEntity: {
       '@type': 'ItemList',
       itemListElement: allProjects.map((project, index) => ({
@@ -65,7 +66,7 @@ export default function ProjectsPage() {
           '@type': 'SoftwareSourceCode',
           name: project.title,
           description: project.description,
-          url: `https://3bdulrahmn.vercel.app/projects/${project.slug}`,
+          url: `${siteConfig.url}/projects/${project.slug}`,
           programmingLanguage: project.techStack.join(', '),
           author: {
             '@type': 'Person',

@@ -71,6 +71,7 @@ export function createBilingualPageMetadata({
 }: BilingualPageMetadataInput): Metadata {
   const description = `${descriptionEn} | ${descriptionAr}`;
   const pageUrl = buildAbsoluteUrl(path);
+  const absoluteOgImage = buildAbsoluteUrl(ogImage);
 
   return {
     title,
@@ -87,7 +88,7 @@ export function createBilingualPageMetadata({
       alternateLocale: 'ar_EG',
       images: [
         {
-          url: ogImage,
+          url: absoluteOgImage,
           width: 1200,
           height: 630,
           alt: `${title} - ${siteConfig.name}`,
@@ -98,7 +99,7 @@ export function createBilingualPageMetadata({
       card: 'summary_large_image',
       title,
       description,
-      images: [ogImage],
+      images: [absoluteOgImage],
       site: '@3bdulrahmn69',
       creator: '@3bdulrahmn69',
     },
