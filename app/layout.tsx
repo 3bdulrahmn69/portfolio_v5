@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     alternateLocale: 'ar_EG',
     images: [
       {
-        url: siteConfig.ogImages.home,
+        url: '/og-home.jpg',
         width: 1200,
         height: 630,
         alt: 'Abdulrahman Moussa portfolio homepage',
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteConfig.title,
     description: siteConfig.description,
-    images: [siteConfig.ogImages.home],
+    images: ['/og-home.jpg'],
   },
   robots: {
     index: true,

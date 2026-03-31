@@ -3,9 +3,7 @@ export const siteConfig = {
   title: 'Abdulrahman Moussa | Frontend Developer',
   description:
     'Clean and elegant portfolio showcasing frontend engineering work, projects, certifications, and practical product experience.',
-  url:
-    process.env.SITE_URL?.replace(/\/$/, '') ||
-    'https://3bdulrahmn.vercel.app',
+  url: 'https://3bdulrahmn.vercel.app',
   email: 'abdulrahman.moussa.dev@gmail.com',
   phone: '+20 101 832 6780',
   location: 'Cairo, Egypt',
@@ -37,9 +35,4 @@ export const siteConfig = {
       href: 'https://www.instagram.com/3bdulrahmn69',
     },
   ],
-  ogImages: {
-    home: '/og-home.jpg',
-    about: '/og-about.jpg',
-    projects: '/og-projects.jpg',
-  },
 } as const;

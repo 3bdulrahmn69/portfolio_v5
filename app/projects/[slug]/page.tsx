@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-import { siteConfig } from '@/lib/site';
-import { createBilingualDescription, createLocaleAlternates } from '@/lib/seo';
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { StaticImageData } from 'next/image';
 import { projects, works } from '@/data';
+import { siteConfig } from '@/lib/site';
+import { createLocaleAlternates } from '@/lib/seo';
 
 import Container from '@/components/layout/container';
 import ProjectActionButtons from '@/components/projects/project-action-buttons';
@@ -21,113 +20,235 @@ import {
   FaLink,
 } from 'react-icons/fa6';
 
-type ProjectDetailsProps = {
-  params: Promise<{ slug: string }>;
-};
+const DEFAULT_PROJECT_KEYWORDS = [
+  'project details',
+  'case study',
+  'frontend project',
+  'software project',
+  'web development',
+] as const;
 
-function toAbsoluteImageUrl(image: string | StaticImageData): string {
-  const src = typeof image === 'string' ? image : image.src;
-  if (/^https?:\/\//.test(src)) return src;
-  return `${siteConfig.url}${src.startsWith('/') ? '' : '/'}${src}`;
+function toAbsoluteUrl(pathOrUrl: string) {
+  if (/^https?:\/\//.test(pathOrUrl)) {
+    return pathOrUrl;
+  }
+
+  const normalizedPath = pathOrUrl.startsWith('/')
+    ? pathOrUrl
+    : `/${pathOrUrl}`;
+  return `${siteConfig.url}${normalizedPath}`;
+}
+
+function getProjectImageUrl(image: string | { src: string }) {
+  return typeof image === 'string' ? image : image.src;
+}
+
+function buildProjectKeywords(tags: string[]) {
+  return Array.from(new Set([...DEFAULT_PROJECT_KEYWORDS, ...tags]));
+}
+
+function getProject(slug: string) {
+  return (
+    works.find((work) => work.slug === slug) ??
+    projects.find((project) => project.slug === slug)
+  );
+}
+
+export async function generateStaticParams() {
+  return [...works, ...projects].map((project) => ({
+    slug: project.slug,
+  }));
 }
 
 export async function generateMetadata({
   params,
-}: ProjectDetailsProps): Promise<Metadata> {
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
-  const project = [...works, ...projects].find((item) => item.slug === slug);
+  const project = getProject(slug);
 
   if (!project) {
     return {
       title: 'Project Not Found',
-      description: 'The requested project details are not available.',
-      robots: {
-        index: false,
-        follow: false,
-      },
+      description: 'The requested project could not be found',
     };
   }
 
-  const shareImage = toAbsoluteImageUrl(project.gallery?.[0] || project.image);
-  const englishDescription = project.description;
-  const arabicDescription = `تفاصيل مشروع ${project.title}، التقنيات المستخدمة، الروابط، وأهم النتائج.`;
-  const description = createBilingualDescription(
-    englishDescription,
-    arabicDescription,
-  );
+  const imageUrl = getProjectImageUrl(project.image);
+  const projectPath = `/projects/${project.slug}`;
+  const projectUrl = toAbsoluteUrl(projectPath);
+  const imageAbsoluteUrl = toAbsoluteUrl(imageUrl);
+  const keywords = buildProjectKeywords(project.tags);
 
   return {
-    title: `${project.title} | Projects`,
-    description,
-    alternates: createLocaleAlternates(`/projects/${project.slug}`),
+    title: `${project.title} | Project Details`,
+    description: project.description,
+    keywords,
+    category: 'technology',
+    authors: [{ name: siteConfig.name, url: siteConfig.url }],
+    creator: siteConfig.name,
+    publisher: siteConfig.name,
+    alternates: createLocaleAlternates(projectPath),
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
     openGraph: {
-      title: `${project.title} | Abdulrahman Moussa`,
-      description,
-      url: `${siteConfig.url}/projects/${project.slug}`,
+      title: `${project.title} | Project Details`,
+      description: project.description,
+      type: 'article',
+      url: projectUrl,
+      siteName: siteConfig.name,
       locale: 'en_US',
       alternateLocale: 'ar_EG',
+      tags: project.tags,
       images: [
         {
-          url: shareImage,
-          width: 1200,
-          height: 630,
-          alt: `${project.title} screenshot`,
+          url: imageAbsoluteUrl,
+          alt: project.title,
         },
       ],
-      type: 'article',
     },
     twitter: {
-      card: 'summary_large_image',
       title: `${project.title} | Abdulrahman Moussa`,
-      description,
-      images: [shareImage],
-    },
-    keywords: [...project.tags, 'مشروع برمجي', 'تفاصيل المشروع'],
-    other: {
-      'geo.region': 'EG-C',
-      'geo.placename': 'Cairo',
-      'geo.position': '30.0444;31.2357',
-      ICBM: '30.0444, 31.2357',
-      'content-language': 'en, ar',
+      card: 'summary_large_image',
+      description: project.description,
+      creator: '@3bdulrahmn69',
+      site: '@3bdulrahmn69',
+      images: [imageAbsoluteUrl],
     },
   };
 }
 
-export default async function ProjectDetails({ params }: ProjectDetailsProps) {
+export default async function ProjectDetails({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
-  const project = [...works, ...projects].find((item) => item.slug === slug);
+  const project = getProject(slug);
 
   if (!project) {
     notFound();
   }
 
-  // JSON-LD structured data for SEO and AI agents
+  const projectPath = `/projects/${project.slug}`;
+  const projectUrl = toAbsoluteUrl(projectPath);
+  const imageAbsoluteUrl = toAbsoluteUrl(getProjectImageUrl(project.image));
+
+  // Rich JSON-LD graph helps search engines and AI systems parse relationships.
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'SoftwareSourceCode',
-    name: project.title,
-    description: project.description,
-    image: toAbsoluteImageUrl(project.image),
-    dateCreated: project.year ? `${project.year}-01-01` : undefined,
-    programmingLanguage: project.techStack.join(', '),
-    ...(project.githubUrl && { codeRepository: project.githubUrl }),
-    ...(project.liveUrl && { url: project.liveUrl }),
-    ...(project.parts &&
-      project.parts.length > 0 && {
-        hasPart: project.parts.map((part) => ({
-          '@type': 'SoftwareApplication',
-          name: part.label,
-          ...(part.description && { description: part.description }),
-          ...(part.liveUrl && { url: part.liveUrl }),
-          ...(part.githubUrl && { codeRepository: part.githubUrl }),
-        })),
-      }),
-    author: {
-      '@type': 'Person',
-      name: siteConfig.name,
-      url: siteConfig.url,
-    },
-    keywords: project.tags?.join(', '),
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        '@id': `${projectUrl}#webpage`,
+        url: projectUrl,
+        name: `${project.title} | Project Details`,
+        description: project.description,
+        inLanguage: 'en',
+        isPartOf: {
+          '@type': 'WebSite',
+          '@id': `${siteConfig.url}#website`,
+          name: siteConfig.name,
+          url: siteConfig.url,
+        },
+        breadcrumb: {
+          '@id': `${projectUrl}#breadcrumb`,
+        },
+        primaryImageOfPage: {
+          '@id': `${projectUrl}#primaryimage`,
+        },
+      },
+      {
+        '@type': 'ImageObject',
+        '@id': `${projectUrl}#primaryimage`,
+        contentUrl: imageAbsoluteUrl,
+        url: imageAbsoluteUrl,
+        caption: project.title,
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${projectUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: siteConfig.url,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Projects',
+            item: `${siteConfig.url}/projects`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: project.title,
+            item: projectUrl,
+          },
+        ],
+      },
+      {
+        '@type': 'SoftwareSourceCode',
+        '@id': `${projectUrl}#software`,
+        name: project.title,
+        description: project.description,
+        url: projectUrl,
+        image: imageAbsoluteUrl,
+        dateCreated: project.year ? `${project.year}-01-01` : undefined,
+        dateModified: project.year ? `${project.year}-12-31` : undefined,
+        inLanguage: 'en',
+        author: {
+          '@type': 'Person',
+          name: siteConfig.name,
+          url: siteConfig.url,
+        },
+        creator: {
+          '@type': 'Person',
+          name: siteConfig.name,
+          url: siteConfig.url,
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: siteConfig.name,
+          url: siteConfig.url,
+        },
+        codeSampleType: project.type,
+        programmingLanguage: project.techStack,
+        keywords: project.tags.join(', '),
+        applicationCategory: project.category,
+        ...(project.githubUrl && { codeRepository: project.githubUrl }),
+        ...(project.liveUrl && { url: project.liveUrl }),
+        ...(typeof project.paid === 'boolean' && {
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: 'USD',
+            price: project.paid ? '1' : '0',
+            availability: 'https://schema.org/InStock',
+          },
+        }),
+        ...(project.parts &&
+          project.parts.length > 0 && {
+            hasPart: project.parts.map((part) => ({
+              '@type': 'SoftwareApplication',
+              name: part.label,
+              ...(part.description && { description: part.description }),
+              ...(part.liveUrl && { url: part.liveUrl }),
+              ...(part.githubUrl && { codeRepository: part.githubUrl }),
+            })),
+          }),
+      },
+    ],
   };
 
   return (

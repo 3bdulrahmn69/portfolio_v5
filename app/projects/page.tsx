@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { siteConfig } from '@/lib/site';
 import { createBilingualPageMetadata } from '@/lib/seo';
 import { projects, works } from '@/data';
 
@@ -22,7 +21,7 @@ export const metadata: Metadata = createBilingualPageMetadata({
     'Explore selected frontend and full-stack projects by Abdulrahman Moussa, including production work and personal builds.',
   descriptionAr:
     'استعرض مشاريع عبدالرحمن موسى في تطوير الواجهات الأمامية والتطبيقات الكاملة، بما يشمل أعمال احترافية ومشاريع شخصية.',
-  ogImage: siteConfig.ogImages.projects,
+  ogImage: '/og-projects.jpg',
   keywords: [
     'Frontend Projects',
     'React Projects',

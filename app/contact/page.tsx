@@ -13,7 +13,7 @@ export const metadata: Metadata = createBilingualPageMetadata({
     'Get in touch with Abdulrahman Moussa for frontend development, project collaboration, and product engineering work.',
   descriptionAr:
     'تواصل مع عبدالرحمن موسى لفرص العمل في تطوير الواجهات الأمامية، تنفيذ المشاريع، والتعاون المهني.',
-  ogImage: siteConfig.ogImages.home,
+  ogImage: '/og-contact.jpg',
   keywords: [
     'Hire Frontend Developer',
     'Contact Developer',

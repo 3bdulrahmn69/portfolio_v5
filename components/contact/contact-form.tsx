@@ -3,9 +3,14 @@
 import { FormEvent, useState } from 'react';
 import emailjs from '@emailjs/browser';
 import Button from '@/components/ui/button';
-import { siteConfig } from '@/lib/site';
 
 type ContactFormState = {
+  name: string;
+  email: string;
+  message: string;
+};
+
+type ErrorsState = {
   name: string;
   email: string;
   message: string;
@@ -17,42 +22,105 @@ const initialState: ContactFormState = {
   message: '',
 };
 
+const initialErrors: ErrorsState = {
+  name: '',
+  email: '',
+  message: '',
+};
+
+const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+
 export default function ContactForm() {
   const [form, setForm] = useState<ContactFormState>(initialState);
+  const [errors, setErrors] = useState<ErrorsState>(initialErrors);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<{
-    type: 'success' | 'error';
+    type: 'success' | 'error' | null;
     message: string;
-  } | null>(null);
+  }>({ type: null, message: '' });
 
+  // ---------------- Validation ----------------
+  const validateField = (name: string, value: string): string => {
+    switch (name) {
+      case 'name':
+        if (!value.trim()) return 'Name is required';
+        if (value.trim().length < 2)
+          return 'Name must be at least 2 characters';
+        if (value.trim().length > 50)
+          return 'Name must be less than 50 characters';
+        return '';
+
+      case 'email':
+        if (!value.trim()) return 'Email is required';
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value))
+          return 'Please enter a valid email address';
+        return '';
+
+      case 'message':
+        if (!value.trim()) return 'Message is required';
+        if (value.trim().length < 10)
+          return 'Message must be at least 10 characters';
+        if (value.trim().length > 1000)
+          return 'Message must be less than 1000 characters';
+        return '';
+
+      default:
+        return '';
+    }
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors = {
+      name: validateField('name', form.name),
+      email: validateField('email', form.email),
+      message: validateField('message', form.message),
+    };
+
+    setErrors(newErrors);
+    return !Object.values(newErrors).some((error) => error !== '');
+  };
+
+  // ---------------- Handlers ----------------
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+
+    setForm((prev) => ({ ...prev, [name]: value }));
+
+    if (errors[name as keyof ErrorsState]) {
+      setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    const error = validateField(name, value);
+    setErrors((prev) => ({ ...prev, [name]: error }));
+  };
+
+  // ---------------- Submit ----------------
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setStatus({ type: null, message: '' });
 
-    const serviceId = process.env.EMAILJS_SERVICE_ID;
-    const templateId = process.env.EMAILJS_TEMPLATE_ID;
-    const publicKey = process.env.EMAILJS_PUBLIC_KEY;
-
-    if (!serviceId || !templateId || !publicKey) {
-      setStatus({
-        type: 'error',
-        message:
-          'Contact form is not configured yet. Please set EmailJS environment variables.',
-      });
-      return;
-    }
+    if (!validateForm()) return;
 
     try {
       setIsSubmitting(true);
-      setStatus(null);
 
       await emailjs.send(
-        serviceId,
-        templateId,
+        serviceId!,
+        templateId!,
         {
-          from_name: form.name,
-          from_email: form.email,
+          name: form.name,
+          email: form.email,
           message: form.message,
-          to_email: siteConfig.email,
         },
         { publicKey },
       );
@@ -62,15 +130,21 @@ export default function ContactForm() {
         message:
           'Your message was sent successfully. I will get back to you soon.',
       });
+
       setForm(initialState);
+      setErrors(initialErrors);
     } catch {
       setStatus({
         type: 'error',
         message:
-          'Could not send your message right now. Please try again in a moment.',
+          'Could not send your message right now. Please try again later.',
       });
     } finally {
       setIsSubmitting(false);
+
+      setTimeout(() => {
+        setStatus({ type: null, message: '' });
+      }, 5000);
     }
   }
 
@@ -79,72 +153,77 @@ export default function ContactForm() {
       onSubmit={onSubmit}
       className="rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-xl space-y-5"
     >
+      {/* Name */}
       <div>
-        <label
-          htmlFor="name"
-          className="block text-sm font-semibold text-foreground mb-2"
-        >
+        <label className="block text-sm font-semibold text-foreground mb-2">
           Name
         </label>
         <input
-          id="name"
           name="name"
           type="text"
-          required
-          autoComplete="name"
           value={form.name}
-          onChange={(event) =>
-            setForm((prev) => ({ ...prev, name: event.target.value }))
-          }
-          className="w-full rounded-xl border border-input bg-background px-4 py-3 text-foreground outline-none transition-colors focus:border-primary"
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className={`w-full rounded-xl border px-4 py-3 outline-none transition-colors ${
+            errors.name
+              ? 'border-destructive'
+              : 'border-input focus:border-primary'
+          }`}
           placeholder="Your name"
         />
+        {errors.name && (
+          <p className="text-sm text-destructive mt-1">{errors.name}</p>
+        )}
       </div>
 
+      {/* Email */}
       <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-semibold text-foreground mb-2"
-        >
+        <label className="block text-sm font-semibold text-foreground mb-2">
           Email
         </label>
         <input
-          id="email"
           name="email"
           type="email"
-          required
-          autoComplete="email"
           value={form.email}
-          onChange={(event) =>
-            setForm((prev) => ({ ...prev, email: event.target.value }))
-          }
-          className="w-full rounded-xl border border-input bg-background px-4 py-3 text-foreground outline-none transition-colors focus:border-primary"
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className={`w-full rounded-xl border px-4 py-3 outline-none transition-colors ${
+            errors.email
+              ? 'border-destructive'
+              : 'border-input focus:border-primary'
+          }`}
           placeholder="your@email.com"
         />
+        {errors.email && (
+          <p className="text-sm text-destructive mt-1">{errors.email}</p>
+        )}
       </div>
 
+      {/* Message */}
       <div>
-        <label
-          htmlFor="message"
-          className="block text-sm font-semibold text-foreground mb-2"
-        >
+        <label className="block text-sm font-semibold text-foreground mb-2">
           Message
         </label>
         <textarea
-          id="message"
           name="message"
-          required
           rows={6}
           value={form.message}
-          onChange={(event) =>
-            setForm((prev) => ({ ...prev, message: event.target.value }))
-          }
-          className="w-full rounded-xl border border-input bg-background px-4 py-3 text-foreground outline-none transition-colors focus:border-primary resize-y"
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className={`w-full rounded-xl border px-4 py-3 outline-none transition-colors resize-y ${
+            errors.message
+              ? 'border-destructive'
+              : 'border-input focus:border-primary'
+          }`}
           placeholder="Tell me about your project or idea..."
         />
+        {errors.message && (
+          <p className="text-sm text-destructive mt-1">{errors.message}</p>
+        )}
       </div>
 
-      {status && (
+      {/* Status */}
+      {status.type && (
         <p
           className={`text-sm font-medium ${
             status.type === 'success' ? 'text-success' : 'text-destructive'

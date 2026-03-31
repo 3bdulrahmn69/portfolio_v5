@@ -23,7 +23,7 @@ export const metadata: Metadata = createBilingualPageMetadata({
     'Learn about Abdulrahman Moussa: frontend engineering background, certifications, courses, education, and design-first development philosophy.',
   descriptionAr:
     'تعرف على عبدالرحمن موسى وخلفيته في تطوير الواجهات الأمامية، الشهادات، التعليم، وفلسفة العمل التي تركز على الجودة والتجربة.',
-  ogImage: siteConfig.ogImages.about,
+  ogImage: '/og-about.jpg',
   type: 'profile',
   keywords: [
     'Frontend Developer Egypt',

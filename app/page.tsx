@@ -14,7 +14,7 @@ export const metadata: Metadata = createBilingualPageMetadata({
     'Frontend developer portfolio for Abdulrahman Moussa with selected projects, technical stack, and contact details.',
   descriptionAr:
     'معرض أعمال لعبدالرحمن موسى يضم المشاريع المختارة، التقنيات المستخدمة، وطرق التواصل.',
-  ogImage: siteConfig.ogImages.home,
+  ogImage: '/og-home.jpg',
   keywords: [
     'Frontend Portfolio',
     'Personal Website',
