@@ -14,7 +14,7 @@ export default function ContactCTA() {
       <Container className="py-28 sm:py-32 relative z-10">
         <div className="mb-14">
           <h2 className="text-4xl sm:text-6xl font-black mb-5 tracking-tight">
-            Let&apos;s Build Something Clean.
+            Let&apos;s Build Something Exceptional.
           </h2>
           <p className="text-muted-foreground text-lg sm:text-xl max-w-3xl leading-relaxed">
             Send a direct message for collaboration, freelance work, or frontend

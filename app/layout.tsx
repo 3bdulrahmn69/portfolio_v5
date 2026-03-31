@@ -25,13 +25,16 @@ export const metadata: Metadata = {
     template: '%s | Abdulrahman Moussa',
   },
   description:
-    'Clean and elegant portfolio showcasing frontend engineering work, projects, certifications, and practical product experience. | معرض أعمال احترافي لعرض مشاريع تطوير الواجهات الأمامية والخبرة العملية بشكل واضح وسهل.',
+    'Expert Frontend Developer & React/Next.js Engineer based in Egypt. Explore a showcase of scalable web applications, interactive frontend projects, and practical product engineering experience. | معرض أعمال عبدالرحمن موسى، مطور واجهات أمامية وخبير في بناء وتطوير تطبيقات الويب باستخدام React.',
   applicationName: siteConfig.name,
   alternates: createLocaleAlternates('/'),
   keywords: [
     'Abdulrahman Moussa',
+    'عبدالرحمن موسى',
     'Frontend Developer',
     'React Developer',
+    'React.js',
+    'Next.js Developer',
     'Next.js Portfolio',
     'TypeScript',
     'UI Engineering',
@@ -39,6 +42,7 @@ export const metadata: Metadata = {
     'مطور React',
     'بورتفوليو',
     'تطوير مواقع',
+    'Egypt Frontend Developer',
   ],
   authors: [{ name: siteConfig.name, url: siteConfig.url }],
   creator: siteConfig.name,
@@ -94,14 +98,17 @@ const websiteJsonLd = {
   url: siteConfig.url,
   inLanguage: ['en', 'ar'],
   description:
-    'Frontend developer portfolio with selected projects, technical stack, and contact channels.',
+    'Frontend developer and React/Next.js engineer portfolio for Abdulrahman Moussa. Discover web development projects, UI engineering skills, and contact channels.',
 };
 
 const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: siteConfig.name,
-  jobTitle: 'Frontend Developer',
+  alternateName: 'عبدالرحمن موسى',
+  jobTitle: 'Frontend Developer, React & Next.js Engineer',
+  description:
+    'Frontend Developer specializing in React, Next.js, and modern TypeScript web applications.',
   url: siteConfig.url,
   email: `mailto:${siteConfig.email}`,
   address: {

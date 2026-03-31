@@ -17,17 +17,23 @@ import {
 } from 'react-icons/fa6';
 
 export const metadata: Metadata = createBilingualPageMetadata({
-  title: 'About | Abdulrahman Moussa',
+  title: 'About Abdulrahman Moussa | React & Next.js Frontend Developer',
   path: '/about',
   descriptionEn:
-    'Learn about Abdulrahman Moussa: frontend engineering background, certifications, courses, education, and design-first development philosophy.',
+    'Learn about Abdulrahman Moussa, a specialized React and Next.js frontend developer. Explore my engineering background, ITI training, ALX software engineering certifications, and design-first development philosophy.',
   descriptionAr:
-    'تعرف على عبدالرحمن موسى وخلفيته في تطوير الواجهات الأمامية، الشهادات، التعليم، وفلسفة العمل التي تركز على الجودة والتجربة.',
+    'تعرف على عبدالرحمن موسى، مطور واجهات أمامية متخصص في React و Next.js. الخبرات، الشهادات من ITI و ALX، التعليم، وفلسفة العمل.',
   ogImage: '/og-about.jpg',
   type: 'profile',
   keywords: [
+    'Abdulrahman Moussa',
+    'React Developer',
+    'Next.js Developer',
     'Frontend Developer Egypt',
+    'Frontend Engineer',
     'Software Engineering Certifications',
+    'ALX Software Engineering',
+    'ITI Frontend',
     'السيرة الذاتية',
     'شهادات تطوير الويب',
   ],
@@ -102,10 +108,10 @@ export default function AboutPage() {
       '@type': 'Person',
       name: siteConfig.name,
       alternateName: 'عبدالرحمن موسى',
-      jobTitle: 'Frontend Developer',
+      jobTitle: 'Frontend Developer, React & Next.js Specialist',
       description:
-        'Frontend developer who loves creating responsive and user-friendly web interfaces.',
-      image: `${siteConfig.url}/og-about.jpg`,
+        'Frontend developer who loves creating responsive, performance-optimized, and user-friendly web interfaces using React and Next.js.',
+      image: `/og-about.jpg`,
       sameAs: siteConfig.socialLinks.map((link) => link.href),
     },
   };

@@ -7,21 +7,23 @@ export default function About() {
       <Container className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
         <div className="space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-background border border-border text-muted-foreground text-sm font-medium">
-            <span>About Me</span>
+            <h2>About Me</h2>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+          <h3 className="text-4xl sm:text-5xl font-bold tracking-tight">
             Passionate about building scalable digital experiences.
-          </h2>
+          </h3>
           <p className="text-lg leading-relaxed text-muted-foreground">
-            Hello! I&apos;m Abdulrahman Moussa. I enjoy creating things that
-            live on the internet, whether that be websites, applications, or
+            Hello! I&apos;m Abdulrahman Moussa. I am a dedicated Frontend
+            Developer based in Egypt. I enjoy creating things that live on the
+            internet, whether that be websites, enterprise applications, or
             anything in between. My goal is to always build products that
-            provide pixel-perfect, performant experiences.
+            provide pixel-perfect, highly-performant React and Next.js
+            experiences.
           </p>
           <p className="text-lg leading-relaxed text-muted-foreground">
-            With a strong foundation in modern web technologies and an eye for
-            design, I bridge the gap between complex logic and beautiful user
-            interfaces.
+            With a strong foundation in modern web technologies involving
+            JavaScript, TypeScript, and state management, I bridge the gap
+            between complex logic and beautiful user interfaces.
           </p>
         </div>
         <div className="relative aspect-square w-full max-w-sm mx-auto animate-float">

@@ -14,7 +14,7 @@ export default function Hero() {
         <div className="flex flex-col items-center md:items-start text-center md:text-left max-w-2xl z-10 w-full">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-muted border border-border text-muted-foreground text-sm mb-6 pointer-events-none">
             <FaTerminal size={14} />
-            <span>Frontend Developer</span>
+            <h2>Frontend Engineer & React Developer</h2>
           </div>
 
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-foreground mb-6 leading-[1.05]">
@@ -25,8 +25,8 @@ export default function Hero() {
           </h1>
 
           <p className="max-w-xl text-base sm:text-lg lg:text-xl text-muted-foreground mb-8 sm:mb-10 leading-relaxed">
-            I craft fast, accessible, and beautiful web products building the
-            bridge between elegant design and complex architecture.
+            I craft fast, scalable, and responsive web applications,
+            specializing in React, Next.js, and modern TypeScript architecture.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">

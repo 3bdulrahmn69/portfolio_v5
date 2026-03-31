@@ -7,17 +7,21 @@ import ContactDetails from '@/components/contact/contact-details';
 import ContactForm from '@/components/contact/contact-form';
 
 export const metadata: Metadata = createBilingualPageMetadata({
-  title: 'Contact | Abdulrahman Moussa',
+  title: 'Contact Abdulrahman Moussa | Hire React Frontend Developer',
   path: '/contact',
   descriptionEn:
-    'Get in touch with Abdulrahman Moussa for frontend development, project collaboration, and product engineering work.',
+    'Get in touch with Abdulrahman Moussa. Hire a skilled frontend developer based in Egypt for your next React, Next.js, or web application project.',
   descriptionAr:
-    'تواصل مع عبدالرحمن موسى لفرص العمل في تطوير الواجهات الأمامية، تنفيذ المشاريع، والتعاون المهني.',
+    'تواصل مع عبدالرحمن موسى، مطور واجهات أمامية متخصص في React. متاح لفرص العمل والتعاون المهني في تطوير الويب.',
   ogImage: '/og-contact.jpg',
   keywords: [
+    'Contact Abdulrahman Moussa',
     'Hire Frontend Developer',
+    'Hire React Developer',
+    'Freelance Frontend Developer',
     'Contact Developer',
     'توظيف مطور واجهات',
+    'تواصل مع عبدالرحمن',
   ],
 });
 
@@ -28,9 +32,10 @@ export default function ContactPage() {
     mainEntity: {
       '@type': 'Person',
       name: siteConfig.name,
+      alternateName: 'عبدالرحمن موسى',
       email: siteConfig.email,
       telephone: siteConfig.phone,
-      jobTitle: 'Frontend Developer',
+      jobTitle: 'Frontend Developer (React & Next.js)',
       url: siteConfig.url,
       sameAs: siteConfig.socialLinks.map((link) => link.href),
     },

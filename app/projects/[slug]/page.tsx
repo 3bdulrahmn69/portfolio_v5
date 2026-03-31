@@ -447,7 +447,7 @@ export default async function ProjectDetails({
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl leading-relaxed mb-8">
             From planning and architecture to polished delivery, I can turn your
-            idea into a production-ready web app with clean UX, strong
+            idea into a production-ready web app with intuitive UX, strong
             performance, and zero unnecessary complexity for you.
           </p>
           <div className="flex flex-wrap gap-3">

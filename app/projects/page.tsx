@@ -15,19 +15,24 @@ import {
 } from 'react-icons/fa6';
 
 export const metadata: Metadata = createBilingualPageMetadata({
-  title: 'Projects | Abdulrahman Moussa',
+  title: 'Projects by Abdulrahman Moussa | Next.js & React Developer',
   path: '/projects',
   descriptionEn:
-    'Explore selected frontend and full-stack projects by Abdulrahman Moussa, including production work and personal builds.',
+    'Explore selected frontend and full-stack projects by Abdulrahman Moussa, including production work, React applications, Next.js products, and personal builds.',
   descriptionAr:
-    'استعرض مشاريع عبدالرحمن موسى في تطوير الواجهات الأمامية والتطبيقات الكاملة، بما يشمل أعمال احترافية ومشاريع شخصية.',
+    'استعرض مشاريع عبدالرحمن موسى في تطوير الواجهات الأمامية وتطبيقات React و Next.js، بما يشمل أعمال احترافية ومشاريع شخصية.',
   ogImage: '/og-projects.jpg',
   keywords: [
+    'Abdulrahman Moussa Projects',
     'Frontend Projects',
     'React Projects',
     'Next.js Projects',
     'Portfolio Projects',
+    'Web Development Portfolio',
+    'TypeScript Projects',
+    'Software Engineer Portfolio',
     'مشاريع تطوير واجهات',
+    'مشاريع React',
   ],
 });
 
@@ -44,8 +49,39 @@ export default function ProjectsPage() {
     (project) => project.type === 'personal',
   ).length;
 
+  const collectionJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Projects by Abdulrahman Moussa',
+    description:
+      'A curated collection of web development projects, featuring React, Next.js, and modern frontend architectures.',
+    url: 'https://3bdulrahmn.vercel.app/projects',
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: allProjects.map((project, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'SoftwareSourceCode',
+          name: project.title,
+          description: project.description,
+          url: `https://3bdulrahmn.vercel.app/projects/${project.slug}`,
+          programmingLanguage: project.techStack.join(', '),
+          author: {
+            '@type': 'Person',
+            name: 'Abdulrahman Moussa',
+          },
+        },
+      })),
+    },
+  };
+
   return (
     <div className="flex flex-col items-center bg-background w-full relative overflow-hidden pt-28 pb-40">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
+      />
       <div className="absolute top-[-8%] right-[-8%] w-[42%] h-[42%] bg-primary/10 rounded-full blur-[150px] opacity-40 pointer-events-none" />
       <div className="absolute top-[45%] left-[-10%] w-[36%] h-[36%] bg-accent/10 rounded-full blur-[150px] opacity-40 pointer-events-none" />
 
@@ -59,7 +95,7 @@ export default function ProjectsPage() {
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl leading-relaxed">
             A curated collection of professional and personal products focused
-            on clean architecture, performance, and polished user experience.
+            on robust architecture, performance, and polished user experience.
           </p>
         </header>
 

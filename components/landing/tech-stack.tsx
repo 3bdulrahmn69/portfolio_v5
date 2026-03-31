@@ -7,7 +7,7 @@ export default function TechStack() {
       <div className="absolute right-0 top-0 bottom-0 w-32 bg-linear-to-l from-background to-transparent z-10 pointer-events-none" />
 
       <h2 className="text-xs uppercase tracking-widest text-muted-foreground mb-8 text-center font-bold relative z-20">
-        Core Technologies
+        Core Technologies I Use as a React & Next.js Developer
       </h2>
 
       {/* Infinite Moving Marquee Container */}
@@ -17,14 +17,18 @@ export default function TechStack() {
           {[...techStack, ...techStack].map((tech, i) => {
             // Map predictable colorful classes base on index
             const colors = [
-              'hover:text-blue-400',
-              'hover:text-yellow-400',
-              'hover:text-sky-400',
+              'hover:text-blue-500',
+              'hover:text-yellow-500',
+              'hover:text-sky-500',
               'hover:text-green-500',
               'hover:text-pink-500',
               'hover:text-purple-500',
               'hover:text-orange-500',
               'hover:text-red-500',
+              'hover:text-cyan-500',
+              'hover:text-lime-500',
+              'hover:text-emerald-500',
+              'hover:text-violet-500',
             ];
             const hoverColor = colors[i % colors.length];
 

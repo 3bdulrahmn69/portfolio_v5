@@ -11,14 +11,21 @@ export const metadata: Metadata = createBilingualPageMetadata({
   title: siteConfig.title,
   path: '/',
   descriptionEn:
-    'Frontend developer portfolio for Abdulrahman Moussa with selected projects, technical stack, and contact details.',
+    'Abdulrahman Moussa - Expert Frontend Developer specializing in React, Next.js, and TypeScript. View my portfolio, modern web development projects, and software engineering skills.',
   descriptionAr:
-    'معرض أعمال لعبدالرحمن موسى يضم المشاريع المختارة، التقنيات المستخدمة، وطرق التواصل.',
+    'معرض أعمال عبدالرحمن موسى - مطور واجهات أمامية متخصص في React و Next.js. يضم المشاريع، التقنيات الحديثة، وطرق التواصل.',
   ogImage: '/og-home.jpg',
   keywords: [
+    'Abdulrahman Moussa',
+    'Frontend Developer',
+    'React Developer',
+    'Next.js Developer',
     'Frontend Portfolio',
     'Personal Website',
     'Modern Web Development',
+    'React.js',
+    'TypeScript Engineer',
+    'Egypt Web Developer',
   ],
 });
 
