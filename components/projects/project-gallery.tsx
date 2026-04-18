@@ -58,7 +58,7 @@ export default function ProjectGallery({
 
         {canNavigate && (
           <div className="absolute inset-x-0 bottom-4 flex items-center justify-between px-4">
-            <Tooltip content="Previous Image">
+            <Tooltip content="Previous Image" position="right">
               <Button
                 onClick={goToPrev}
                 variant="icon"
@@ -69,7 +69,7 @@ export default function ProjectGallery({
               </Button>
             </Tooltip>
 
-            <Tooltip content="Next Image">
+            <Tooltip content="Next Image" position="left">
               <Button
                 onClick={goToNext}
                 variant="icon"
