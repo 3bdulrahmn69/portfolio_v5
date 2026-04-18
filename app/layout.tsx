@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import { siteConfig } from '@/lib/site';
 import { createLocaleAlternates } from '@/lib/seo';
 import { Outfit, Roboto_Mono } from 'next/font/google';
@@ -7,6 +8,16 @@ import './globals.css';
 import Navbar from '@/components/layout/navbar';
 import GoToTop from '@/components/shared/go-to-top';
 import Footer from '@/components/layout/footer';
+
+const Analytics = dynamic(() =>
+  import('@vercel/analytics/next').then((mod) => ({ default: mod.Analytics })),
+);
+
+const SpeedInsights = dynamic(() =>
+  import('@vercel/speed-insights/next').then((mod) => ({
+    default: mod.SpeedInsights,
+  })),
+);
 
 const outfit = Outfit({
   variable: '--font-sans',
@@ -145,6 +156,8 @@ export default function RootLayout({
         <main className="flex-1 flex flex-col">{children}</main>
         <GoToTop />
         <Footer />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
