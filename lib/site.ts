@@ -3,7 +3,7 @@ export const siteConfig = {
   title: 'Abdulrahman Moussa | Frontend Developer | React & Next.js Engineer',
   description:
     'Comprehensive portfolio showcasing high-performance web applications, interactive frontend projects, and practical software engineering experience. Highly skilled in building accessible, scalable user interfaces with React, Next.js, and TypeScript.',
-  url: 'https://portfolio-v5-sooty.vercel.app',
+  url: 'https://3bdulrahmn.vercel.app',
   email: 'abdulrahman.moussa.dev@gmail.com',
   phone: '+20 101 832 6780',
   location: 'Cairo, Egypt',
