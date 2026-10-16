@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Abdulrahman Moussa — Portfolio
+
+Personal portfolio showcasing professional client work and personal projects, built with Next.js 16, React 19, TypeScript, and Tailwind CSS v4.
+
+**Live:** [3bdulrahmn.vercel.app](https://3bdulrahmn.vercel.app)
+
+## Features
+
+- Fully static, SEO-optimized pages (sitemap, robots, per-page metadata, JSON-LD structured data)
+- Dynamic project detail pages with galleries, demo modals, and case-study content
+- Contact form powered by EmailJS with validation and honeypot spam protection
+- Dark theme design system with custom scrollbar, marquee, and motion effects
+- Vercel Analytics + Speed Insights
+
+## Tech Stack
+
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · react-icons · react-parallax-tilt · EmailJS
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To enable the contact form, copy `.env.example` to `.env` and fill in your EmailJS credentials.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+| Command         | Description          |
+| --------------- | -------------------- |
+| `npm run dev`   | Start dev server     |
+| `npm run build` | Production build     |
+| `npm run start` | Serve the build      |
+| `npm run lint`  | Run ESLint           |
 
-To learn more about Next.js, take a look at the following resources:
+## Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+app/          Routes: home, about, projects/[slug], contact
+components/   UI, layout, landing, projects, contact sections
+data/         Projects, works, certifications, education, courses
+lib/          Site config, SEO helpers, types, utils
+public/       Images and static assets
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

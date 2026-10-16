@@ -19,7 +19,7 @@ export default function GoToTop() {
   if (!visible) return null;
 
   return (
-    <div className="fixed right-5 bottom-5 sm:right-8 sm:bottom-8 z-40">
+    <div className="fixed right-5 bottom-5 sm:right-8 sm:bottom-8 z-(--z-toast)">
       <Button
         aria-label="Go to top"
         variant="icon"

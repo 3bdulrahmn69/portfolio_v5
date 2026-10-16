@@ -32,12 +32,22 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
+  useEffect(() => {
+    if (!isMobileOpen) return;
+
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMobileOpen(false);
+    };
+
+    document.addEventListener('keydown', handleEsc);
+    return () => document.removeEventListener('keydown', handleEsc);
+  }, [isMobileOpen]);
+
   return (
     <>
       <header
-        className={`fixed left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-5xl transition-all duration-500 rounded-full border border-border/50 bg-background/80 backdrop-blur-xl shadow-2xl ${
-          isVisible ? 'top-6 opacity-100' : '-top-32 opacity-0'
-        }`}
+        className={`fixed left-1/2 -translate-x-1/2 z-(--z-sticky) w-[95%] max-w-5xl transition-all duration-500 rounded-full border border-border/50 bg-background/80 backdrop-blur-xl shadow-2xl ${isVisible ? 'top-6 opacity-100' : '-top-32 opacity-0'
+          }`}
       >
         <div className="flex items-center justify-between h-16 px-6 sm:px-8">
           {/* Part 1: Name */}
@@ -52,18 +62,21 @@ export default function Navbar() {
           <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-muted-foreground absolute left-1/2 -translate-x-1/2">
             <Link
               href="/"
+              aria-current={pathname === '/' ? 'page' : undefined}
               className={`hover:text-foreground hover:scale-105 transition-all ${pathname === '/' ? 'text-primary font-bold' : ''}`}
             >
               Home
             </Link>
             <Link
               href="/about"
+              aria-current={pathname === '/about' ? 'page' : undefined}
               className={`hover:text-foreground hover:scale-105 transition-all ${pathname === '/about' ? 'text-primary font-bold' : ''}`}
             >
               About
             </Link>
             <Link
               href="/projects"
+              aria-current={pathname === '/projects' ? 'page' : undefined}
               className={`hover:text-foreground hover:scale-105 transition-all ${pathname === '/projects' ? 'text-primary font-bold' : ''}`}
             >
               Projects
@@ -88,6 +101,8 @@ export default function Navbar() {
               className="md:hidden text-foreground"
               onClick={() => setIsMobileOpen(!isMobileOpen)}
               aria-label="Toggle Menu"
+              aria-expanded={isMobileOpen}
+              aria-controls="mobile-menu"
             >
               {isMobileOpen ? <FaXmark size={20} /> : <FaBars size={20} />}
             </Button>
@@ -97,15 +112,16 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       <div
-        className={`fixed top-24 left-1/2 -translate-x-1/2 w-[90%] max-w-sm z-40 bg-card/95 backdrop-blur-xl border border-border/50 rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 origin-top transform ${
-          isMobileOpen && isVisible
-            ? 'scale-y-100 opacity-100 visible'
-            : 'scale-y-0 opacity-0 invisible'
-        }`}
+        id="mobile-menu"
+        className={`fixed top-24 left-1/2 -translate-x-1/2 w-[90%] max-w-sm z-(--z-dropdown) bg-card/95 backdrop-blur-xl border border-border/50 rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 origin-top transform ${isMobileOpen && isVisible
+          ? 'scale-y-100 opacity-100 visible'
+          : 'scale-y-0 opacity-0 invisible'
+          }`}
       >
         <nav className="flex flex-col items-center justify-center p-8 gap-6 text-lg font-bold text-foreground">
           <Link
             href="/"
+            aria-current={pathname === '/' ? 'page' : undefined}
             className={`hover:text-primary transition-colors w-full text-center py-2 ${pathname === '/' ? 'text-primary' : ''}`}
             onClick={() => setIsMobileOpen(false)}
           >
@@ -114,6 +130,7 @@ export default function Navbar() {
           <div className="h-px w-full bg-border/50" />
           <Link
             href="/about"
+            aria-current={pathname === '/about' ? 'page' : undefined}
             className={`hover:text-primary transition-colors w-full text-center py-2 ${pathname === '/about' ? 'text-primary' : ''}`}
             onClick={() => setIsMobileOpen(false)}
           >
@@ -122,6 +139,7 @@ export default function Navbar() {
           <div className="h-px w-full bg-border/50" />
           <Link
             href="/projects"
+            aria-current={pathname === '/projects' ? 'page' : undefined}
             className={`hover:text-primary transition-colors w-full text-center py-2 ${pathname === '/projects' ? 'text-primary' : ''}`}
             onClick={() => setIsMobileOpen(false)}
           >

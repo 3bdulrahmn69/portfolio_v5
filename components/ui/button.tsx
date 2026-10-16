@@ -74,7 +74,7 @@ export default function Button({
     'transition-[color,background-color,border-color,transform,box-shadow] duration-300 ease-out',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
     'overflow-hidden before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/3 before:w-1/3 before:-skew-x-12 before:bg-white/20 before:opacity-0 hover:before:animate-[button-shine_650ms_ease-out_forwards]',
-    'disabled:pointer-events-none disabled:opacity-50 disabled:hover:translate-y-0',
+    'disabled:opacity-50 disabled:hover:translate-y-0 aria-disabled:opacity-50 aria-disabled:hover:translate-y-0',
     variantClasses[variant],
     sizeClasses[size],
     className,

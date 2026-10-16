@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
-import { createBilingualPageMetadata } from '@/lib/seo';
+import { createPageMetadata, createBreadcrumbJsonLd } from '@/lib/seo';
 import { projects, works } from '@/data';
 
 import Button from '@/components/ui/button';
 import Container from '@/components/layout/container';
-import ProjectCard from '@/components/projects/project-card';
+import ProjectsBrowser from '@/components/projects/projects-browser';
 
 import {
   FaArrowRight,
@@ -15,13 +15,11 @@ import {
 } from 'react-icons/fa6';
 import { siteConfig } from '@/lib/site';
 
-export const metadata: Metadata = createBilingualPageMetadata({
+export const metadata: Metadata = createPageMetadata({
   title: 'Projects by Abdulrahman Moussa | Next.js & React Developer',
   path: '/projects',
-  descriptionEn:
-    'Explore selected frontend and full-stack projects by Abdulrahman Moussa, including production work, React applications, Next.js products, and personal builds.',
-  descriptionAr:
-    'استعرض مشاريع عبدالرحمن موسى في تطوير الواجهات الأمامية وتطبيقات React و Next.js، بما يشمل أعمال احترافية ومشاريع شخصية.',
+  description:
+    'Frontend and full-stack projects by Abdulrahman Moussa — production client platforms plus personal React and Next.js applications.',
   ogImage: '/og-projects.jpg',
   keywords: [
     'Abdulrahman Moussa Projects',
@@ -83,10 +81,21 @@ export default function ProjectsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            createBreadcrumbJsonLd([
+              { name: 'Home', path: '/' },
+              { name: 'Projects', path: '/projects' },
+            ]),
+          ),
+        }}
+      />
       <div className="absolute top-[-8%] right-[-8%] w-[42%] h-[42%] bg-primary/10 rounded-full blur-[150px] opacity-40 pointer-events-none" />
       <div className="absolute top-[45%] left-[-10%] w-[36%] h-[36%] bg-accent/10 rounded-full blur-[150px] opacity-40 pointer-events-none" />
 
-      <Container className="z-10">
+      <Container className="z-(--z-content)">
         <header className="mb-16 md:mb-20">
           <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary border border-border text-sm font-semibold text-secondary-foreground mb-6">
             Portfolio Collection
@@ -100,11 +109,12 @@ export default function ProjectsPage() {
           </p>
         </header>
 
-        <div className="flex flex-col gap-24">
-          {allProjects.map((project, idx) => (
-            <ProjectCard key={project.slug} project={project} idx={idx} />
-          ))}
-        </div>
+        <ProjectsBrowser
+          projects={allProjects.map((project) => ({
+            ...project,
+            parts: undefined,
+          }))}
+        />
 
         <div className="flex justify-center mt-24">
           <Button

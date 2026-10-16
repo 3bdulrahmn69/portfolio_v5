@@ -6,7 +6,7 @@ const GEO_META = {
   'geo.placename': 'Cairo',
   'geo.position': '30.0444;31.2357',
   ICBM: '30.0444, 31.2357',
-  'content-language': 'en, ar',
+  'content-language': 'en',
 } as const;
 
 const DEFAULT_KEYWORDS = [
@@ -39,10 +39,6 @@ function buildAlternates(path: string): Metadata['alternates'] {
 
   return {
     canonical: normalizedPath,
-    languages: {
-      'en-US': normalizedPath,
-      'ar-EG': normalizedPath,
-    },
   };
 }
 
@@ -50,26 +46,23 @@ function mergeKeywords(customKeywords: string[] = []): string[] {
   return Array.from(new Set([...DEFAULT_KEYWORDS, ...customKeywords]));
 }
 
-type BilingualPageMetadataInput = {
+type PageMetadataInput = {
   title: string;
   path: string;
-  descriptionEn: string;
-  descriptionAr: string;
+  description: string;
   ogImage: string;
   keywords?: string[];
   type?: 'website' | 'article' | 'profile';
 };
 
-export function createBilingualPageMetadata({
+export function createPageMetadata({
   title,
   path,
-  descriptionEn,
-  descriptionAr,
+  description,
   ogImage,
   keywords,
   type = 'website',
-}: BilingualPageMetadataInput): Metadata {
-  const description = `${descriptionEn} | ${descriptionAr}`;
+}: PageMetadataInput): Metadata {
   const pageUrl = buildAbsoluteUrl(path);
   const absoluteOgImage = buildAbsoluteUrl(ogImage);
 
@@ -85,7 +78,6 @@ export function createBilingualPageMetadata({
       siteName: siteConfig.name,
       type,
       locale: 'en_US',
-      alternateLocale: 'ar_EG',
       images: [
         {
           url: absoluteOgImage,
@@ -111,9 +103,20 @@ export function createLocaleAlternates(path: string): Metadata['alternates'] {
   return buildAlternates(path);
 }
 
-export function createBilingualDescription(
-  descriptionEn: string,
-  descriptionAr: string,
-): string {
-  return `${descriptionEn} | ${descriptionAr}`;
+type BreadcrumbItem = {
+  name: string;
+  path: string;
+};
+
+export function createBreadcrumbJsonLd(items: BreadcrumbItem[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: buildAbsoluteUrl(item.path),
+    })),
+  };
 }

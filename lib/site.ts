@@ -1,8 +1,8 @@
 export const siteConfig = {
   name: 'Abdulrahman Moussa',
-  title: 'Abdulrahman Moussa | Frontend Developer | React & Next.js Engineer',
+  title: 'Abdulrahman Moussa | React & Next.js Frontend Developer',
   description:
-    'Comprehensive portfolio showcasing high-performance web applications, interactive frontend projects, and practical software engineering experience. Highly skilled in building accessible, scalable user interfaces with React, Next.js, and TypeScript.',
+    'Portfolio of Abdulrahman Moussa — frontend developer building fast, accessible web applications with React, Next.js, and TypeScript.',
   url: 'https://3bdulrahmn.vercel.app',
   email: 'abdulrahman.moussa.dev@gmail.com',
   phone: '+20 101 832 6780',

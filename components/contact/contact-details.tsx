@@ -1,11 +1,58 @@
-import { FaEnvelope, FaLocationDot, FaPhone } from 'react-icons/fa6';
+import type { ReactNode } from 'react';
+import {
+  FaEnvelope,
+  FaLocationDot,
+  FaPhone,
+  FaWhatsapp,
+} from 'react-icons/fa6';
 import { siteConfig } from '@/lib/site';
 import Button from '@/components/ui/button';
 import SocialLinks from '@/components/shared/social-links';
+import CopyEmailButton from '@/components/contact/copy-email-button';
+
+const whatsappUrl = `https://wa.me/${siteConfig.phone.replace(/\D/g, '')}`;
 
 type ContactDetailsProps = {
   className?: string;
 };
+
+function ContactRow({
+  icon,
+  label,
+  value,
+  note,
+  actions,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: string;
+  note?: string;
+  actions: ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-3 p-5 transition-colors hover:bg-secondary/40 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex items-center gap-3 min-w-0">
+        <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
+          {icon}
+        </span>
+        <div className="min-w-0">
+          <p className="text-xs uppercase tracking-wider text-muted-foreground">
+            {label}
+          </p>
+          <p className="text-sm sm:text-base font-semibold text-foreground break-all">
+            {value}
+          </p>
+          {note && (
+            <p className="text-sm text-muted-foreground mt-0.5">{note}</p>
+          )}
+        </div>
+      </div>
+      <div className="flex shrink-0 flex-wrap gap-2 ps-13 sm:ps-0">
+        {actions}
+      </div>
+    </div>
+  );
+}
 
 export default function ContactDetails({ className }: ContactDetailsProps) {
   return (
@@ -16,83 +63,69 @@ export default function ContactDetails({ className }: ContactDetailsProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <article className="rounded-2xl border border-border bg-card p-5 shadow-sm hover:shadow-lg hover:border-primary/40 transition-all">
-          <div className="flex items-start justify-between gap-3 mb-3">
-            <div className="flex items-center gap-3 min-w-0">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-primary">
-                <FaEnvelope />
-              </span>
-              <p className="text-xs uppercase tracking-wider text-muted-foreground">
-                Email
-              </p>
-            </div>
-            <Button
-              href={`mailto:${siteConfig.email}`}
-              variant="outline"
-              size="sm"
-              className="shrink-0 whitespace-nowrap"
-            >
-              <FaEnvelope /> Send Email
-            </Button>
-          </div>
-          <p className="text-sm sm:text-base font-semibold text-foreground break-all leading-relaxed">
-            {siteConfig.email}
-          </p>
-        </article>
+      <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm divide-y divide-border/60">
+        <ContactRow
+          icon={<FaEnvelope />}
+          label="Email"
+          value={siteConfig.email}
+          actions={
+            <>
+              <CopyEmailButton />
+              <Button
+                href={`mailto:${siteConfig.email}`}
+                variant="outline"
+                size="sm"
+              >
+                <FaEnvelope /> Send
+              </Button>
+            </>
+          }
+        />
 
-        <article className="rounded-2xl border border-border bg-card p-5 shadow-sm hover:shadow-lg hover:border-primary/40 transition-all">
-          <div className="flex items-start justify-between gap-3 mb-3">
-            <div className="flex items-center gap-3 min-w-0">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-primary">
-                <FaPhone />
-              </span>
-              <p className="text-xs uppercase tracking-wider text-muted-foreground">
-                Phone
-              </p>
-            </div>
-            <Button
-              href={`tel:${siteConfig.phone.replace(/\s+/g, '')}`}
-              variant="outline"
-              size="sm"
-              className="shrink-0 whitespace-nowrap"
-            >
-              <FaPhone /> Call
-            </Button>
-          </div>
-          <p className="text-sm sm:text-base font-semibold text-foreground">
-            {siteConfig.phone}
-          </p>
-        </article>
+        <ContactRow
+          icon={<FaPhone />}
+          label="Phone & WhatsApp"
+          value={siteConfig.phone}
+          actions={
+            <>
+              <Button
+                href={`tel:${siteConfig.phone.replace(/\s+/g, '')}`}
+                variant="outline"
+                size="sm"
+              >
+                <FaPhone /> Call
+              </Button>
+              <Button
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="outline"
+                size="sm"
+                className="border-[#25d366]/50 text-[#25d366] hover:bg-[#25d366]/10 hover:border-[#25d366] hover:text-[#128c7e]"
+              >
+                <FaWhatsapp /> WhatsApp
+              </Button>
+            </>
+          }
+        />
 
-        <article className="rounded-2xl border border-border bg-card p-5 shadow-sm hover:shadow-lg hover:border-primary/40 transition-all sm:col-span-2">
-          <div className="flex items-start justify-between gap-3 mb-3">
-            <div className="flex items-center gap-3 min-w-0">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-primary">
-                <FaLocationDot />
-              </span>
-              <p className="text-xs uppercase tracking-wider text-muted-foreground">
-                Location
-              </p>
-            </div>
+        <ContactRow
+          icon={<FaLocationDot />}
+          label="Location"
+          value={siteConfig.location}
+          note="Available for remote and on-site work."
+          actions={
             <Button
               href="https://maps.google.com/?q=Cairo%2C%20Egypt"
               target="_blank"
               rel="noopener noreferrer"
               variant="outline"
               size="sm"
-              className="shrink-0 whitespace-nowrap"
             >
-              <FaLocationDot /> Open Map
+              <FaLocationDot /> Map
             </Button>
-          </div>
-          <p className="text-sm sm:text-base font-semibold text-foreground">
-            {siteConfig.location}
-          </p>
-          <p className="text-sm text-muted-foreground mt-2">
-            Available for remote and on-site work.
-          </p>
-        </article>
+          }
+        />
       </div>
 
       <SocialLinks className="mt-5 rounded-2xl border border-border bg-card p-5 shadow-sm" />

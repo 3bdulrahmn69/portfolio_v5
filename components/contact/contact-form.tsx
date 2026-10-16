@@ -8,6 +8,7 @@ type ContactFormState = {
   name: string;
   email: string;
   message: string;
+  website: string; // honeypot
 };
 
 type ErrorsState = {
@@ -20,6 +21,7 @@ const initialState: ContactFormState = {
   name: '',
   email: '',
   message: '',
+  website: '',
 };
 
 const initialErrors: ErrorsState = {
@@ -111,6 +113,26 @@ export default function ContactForm() {
 
     if (!validateForm()) return;
 
+    // Honeypot: silently accept submissions that fill the hidden field
+    if (form.website) {
+      setStatus({
+        type: 'success',
+        message:
+          'Your message was sent successfully. I will get back to you soon.',
+      });
+      setForm(initialState);
+      return;
+    }
+
+    if (!serviceId || !templateId || !publicKey) {
+      setStatus({
+        type: 'error',
+        message:
+          'Contact form is not configured right now. Please email me directly instead.',
+      });
+      return;
+    }
+
     try {
       setIsSubmitting(true);
 
@@ -151,83 +173,130 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-xl space-y-5"
+      className="relative rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-xl space-y-5"
     >
+      {/* Honeypot - hidden from users, catches bots */}
+      <div
+        aria-hidden="true"
+        className="absolute opacity-0 h-0 overflow-hidden pointer-events-none"
+      >
+        <label htmlFor="contact-website">Website</label>
+        <input
+          id="contact-website"
+          name="website"
+          type="text"
+          value={form.website}
+          onChange={handleChange}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+
       {/* Name */}
       <div>
-        <label className="block text-sm font-semibold text-foreground mb-2">
+        <label
+          htmlFor="contact-name"
+          className="block text-sm font-semibold text-foreground mb-2"
+        >
           Name
         </label>
         <input
+          id="contact-name"
           name="name"
           type="text"
+          required
           value={form.name}
           onChange={handleChange}
           onBlur={handleBlur}
-          className={`w-full rounded-xl border px-4 py-3 outline-none transition-colors ${
-            errors.name
-              ? 'border-destructive'
-              : 'border-input focus:border-primary'
-          }`}
+          aria-invalid={!!errors.name}
+          aria-describedby={errors.name ? 'contact-name-error' : undefined}
+          className={`w-full rounded-xl border px-4 py-3 outline-none transition-colors bg-background focus-visible:ring-2 focus-visible:ring-ring ${errors.name
+            ? 'border-destructive'
+            : 'border-input focus:border-primary'
+            }`}
           placeholder="Your name"
         />
         {errors.name && (
-          <p className="text-sm text-destructive mt-1">{errors.name}</p>
+          <p id="contact-name-error" className="text-sm text-destructive mt-1">
+            {errors.name}
+          </p>
         )}
       </div>
 
       {/* Email */}
       <div>
-        <label className="block text-sm font-semibold text-foreground mb-2">
+        <label
+          htmlFor="contact-email"
+          className="block text-sm font-semibold text-foreground mb-2"
+        >
           Email
         </label>
         <input
+          id="contact-email"
           name="email"
           type="email"
+          required
           value={form.email}
           onChange={handleChange}
           onBlur={handleBlur}
-          className={`w-full rounded-xl border px-4 py-3 outline-none transition-colors ${
-            errors.email
-              ? 'border-destructive'
-              : 'border-input focus:border-primary'
-          }`}
+          aria-invalid={!!errors.email}
+          aria-describedby={errors.email ? 'contact-email-error' : undefined}
+          className={`w-full rounded-xl border px-4 py-3 outline-none transition-colors bg-background focus-visible:ring-2 focus-visible:ring-ring ${errors.email
+            ? 'border-destructive'
+            : 'border-input focus:border-primary'
+            }`}
           placeholder="your@email.com"
         />
         {errors.email && (
-          <p className="text-sm text-destructive mt-1">{errors.email}</p>
+          <p id="contact-email-error" className="text-sm text-destructive mt-1">
+            {errors.email}
+          </p>
         )}
       </div>
 
       {/* Message */}
       <div>
-        <label className="block text-sm font-semibold text-foreground mb-2">
+        <label
+          htmlFor="contact-message"
+          className="block text-sm font-semibold text-foreground mb-2"
+        >
           Message
         </label>
         <textarea
+          id="contact-message"
           name="message"
           rows={6}
+          required
           value={form.message}
           onChange={handleChange}
           onBlur={handleBlur}
-          className={`w-full rounded-xl border px-4 py-3 outline-none transition-colors resize-y ${
-            errors.message
-              ? 'border-destructive'
-              : 'border-input focus:border-primary'
-          }`}
+          aria-invalid={!!errors.message}
+          aria-describedby={
+            errors.message ? 'contact-message-error' : undefined
+          }
+          className={`w-full rounded-xl border px-4 py-3 outline-none transition-colors resize-y bg-background focus-visible:ring-2 focus-visible:ring-ring ${errors.message
+            ? 'border-destructive'
+            : 'border-input focus:border-primary'
+            }`}
           placeholder="Tell me about your project or idea..."
         />
         {errors.message && (
-          <p className="text-sm text-destructive mt-1">{errors.message}</p>
+          <p
+            id="contact-message-error"
+            className="text-sm text-destructive mt-1"
+          >
+            {errors.message}
+          </p>
         )}
       </div>
 
       {/* Status */}
       {status.type && (
         <p
-          className={`text-sm font-medium ${
-            status.type === 'success' ? 'text-success' : 'text-destructive'
-          }`}
+          role="status"
+          aria-live="polite"
+          className={`text-sm font-medium ${status.type === 'success' ? 'text-success' : 'text-destructive'
+            }`}
         >
           {status.message}
         </p>

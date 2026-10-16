@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Project } from '@/lib/definitions';
+import type { Project } from '@/lib/definitions';
 
 import ProjectTechStack from './project-tech-stack';
 import ProjectActionButtons from './project-action-buttons';
@@ -13,10 +13,7 @@ export default function ProjectCard({
   idx: number;
 }) {
   return (
-    <article
-      key={project.slug}
-      className="group relative flex flex-col lg:flex-row items-center gap-12 lg:gap-20 w-full"
-    >
+    <article className="group relative flex flex-col lg:flex-row items-center gap-12 lg:gap-20 w-full">
       <div
         className={`w-full lg:w-1/2 flex flex-col ${idx % 2 !== 0 ? 'lg:order-2' : ''}`}
       >
@@ -28,7 +25,10 @@ export default function ProjectCard({
         </div>
 
         <div className="flex items-center justify-between gap-4 mb-4">
-          <Link href={`/projects/${project.slug}`}>
+          <Link
+            href={`/projects/${project.slug}`}
+            className="rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+          >
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] group-hover:text-primary transition-colors duration-500">
               {project.title}
             </h2>
@@ -71,7 +71,8 @@ export default function ProjectCard({
         <div className="relative aspect-video w-full rounded-2xl overflow-hidden shadow-2xl bg-muted border border-border/50 transition-shadow duration-700 group-hover:shadow-primary/10">
           <Link
             href={`/projects/${project.slug}`}
-            className="absolute inset-0 z-10"
+            className="absolute inset-0 z-(--z-content) focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-primary"
+            aria-label={`View ${project.title} details`}
           >
             <Image
               src={project.image}
@@ -79,11 +80,10 @@ export default function ProjectCard({
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
-              loading="eager"
             />
           </Link>
 
-          <div className="absolute top-6 right-6 bg-background/90 backdrop-blur-md text-foreground text-xs font-bold px-3 py-1.5 rounded-full border border-border z-20 shadow-md">
+          <div className="absolute top-6 right-6 bg-background/90 backdrop-blur-md text-foreground text-xs font-bold px-3 py-1.5 rounded-full border border-border z-(--z-raised) shadow-md">
             {project.type === 'professional' ? 'Professional' : 'Personal'}
           </div>
         </div>

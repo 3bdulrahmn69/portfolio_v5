@@ -32,7 +32,7 @@ export default function Tooltip({
       {children}
 
       <div
-        className={`absolute opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200 pointer-events-none z-50 flex ${positionClasses[position]}`}
+        className={`absolute opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200 pointer-events-none z-(--z-tooltip) flex ${positionClasses[position]}`}
       >
         <div className="bg-foreground text-background text-xs font-bold px-3 py-1.5 rounded-md shadow-xl whitespace-nowrap">
           {content}

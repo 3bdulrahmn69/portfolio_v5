@@ -12,7 +12,7 @@ export default function NotFound() {
       <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
         Page Not Found
       </h2>
-      <p className="text-lg text-muted-foreground max-w-md mb-10 leading-relaxed z-10">
+      <p className="text-lg text-muted-foreground max-w-md mb-10 leading-relaxed z-(--z-content)">
         I couldn&apos;t find the page you&apos;re looking for. It might have
         been moved or doesn&apos;t exist.
       </p>
@@ -21,7 +21,7 @@ export default function NotFound() {
         href="/"
         variant="primary"
         size="lg"
-        className="font-bold text-lg shadow-xl z-10"
+        className="font-bold text-lg shadow-xl z-(--z-content)"
       >
         <FaArrowLeft /> Return Home
       </Button>

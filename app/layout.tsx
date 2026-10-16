@@ -1,23 +1,14 @@
 import type { Metadata } from 'next';
-import dynamic from 'next/dynamic';
 import { siteConfig } from '@/lib/site';
 import { createLocaleAlternates } from '@/lib/seo';
 import { Outfit, Roboto_Mono } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import './globals.css';
 import Navbar from '@/components/layout/navbar';
 import GoToTop from '@/components/shared/go-to-top';
 import Footer from '@/components/layout/footer';
-
-const Analytics = dynamic(() =>
-  import('@vercel/analytics/next').then((mod) => ({ default: mod.Analytics })),
-);
-
-const SpeedInsights = dynamic(() =>
-  import('@vercel/speed-insights/next').then((mod) => ({
-    default: mod.SpeedInsights,
-  })),
-);
 
 const outfit = Outfit({
   variable: '--font-sans',
@@ -35,8 +26,7 @@ export const metadata: Metadata = {
     default: siteConfig.title,
     template: '%s | Abdulrahman Moussa',
   },
-  description:
-    'Expert Frontend Developer & React/Next.js Engineer based in Egypt. Explore a showcase of scalable web applications, interactive frontend projects, and practical product engineering experience. | معرض أعمال عبدالرحمن موسى، مطور واجهات أمامية وخبير في بناء وتطوير تطبيقات الويب باستخدام React.',
+  description: siteConfig.description,
   applicationName: siteConfig.name,
   alternates: createLocaleAlternates('/'),
   keywords: [
@@ -66,7 +56,6 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     type: 'website',
     locale: 'en_US',
-    alternateLocale: 'ar_EG',
     images: [
       {
         url: '/og-home.jpg',
@@ -98,7 +87,7 @@ export const metadata: Metadata = {
     'geo.placename': 'Cairo',
     'geo.position': '30.0444;31.2357',
     ICBM: '30.0444, 31.2357',
-    'content-language': 'en, ar',
+    'content-language': 'en',
   },
 };
 
@@ -107,7 +96,7 @@ const websiteJsonLd = {
   '@type': 'WebSite',
   name: siteConfig.name,
   url: siteConfig.url,
-  inLanguage: ['en', 'ar'],
+  inLanguage: 'en',
   description:
     'Frontend developer and React/Next.js engineer portfolio for Abdulrahman Moussa. Discover web development projects, UI engineering skills, and contact channels.',
 };
@@ -121,6 +110,16 @@ const personJsonLd = {
   description:
     'Frontend Developer specializing in React, Next.js, and modern TypeScript web applications.',
   url: siteConfig.url,
+  image: `${siteConfig.url}/my.webp`,
+  knowsAbout: [
+    'React',
+    'Next.js',
+    'TypeScript',
+    'Tailwind CSS',
+    'Frontend Architecture',
+    'Web Performance',
+    'Accessibility',
+  ],
   email: `mailto:${siteConfig.email}`,
   address: {
     '@type': 'PostalAddress',
@@ -140,10 +139,13 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${outfit.variable} ${robotoMono.variable} h-full antialiased black`}
+      className={`${outfit.variable} ${robotoMono.variable} h-full antialiased dark`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body
+        className="min-h-full flex flex-col bg-background text-foreground"
+        suppressHydrationWarning
+      >
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
@@ -152,8 +154,16 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-(--z-tooltip) focus:px-4 focus:py-2 focus:rounded-lg focus:bg-primary focus:text-primary-foreground focus:font-semibold"
+        >
+          Skip to content
+        </a>
         <Navbar />
-        <main className="flex-1 flex flex-col">{children}</main>
+        <main id="main-content" className="flex-1 flex flex-col">
+          {children}
+        </main>
         <GoToTop />
         <Footer />
         <Analytics />

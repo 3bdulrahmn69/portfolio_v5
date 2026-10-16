@@ -4,14 +4,14 @@ import Container from '@/components/layout/container';
 export default function About() {
   return (
     <section className="w-full bg-secondary text-secondary-foreground py-24 relative overflow-hidden">
-      <Container className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
+      <Container className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-(--z-content)">
         <div className="space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-background border border-border text-muted-foreground text-sm font-medium">
-            <h2>About Me</h2>
+            <span>About Me</span>
           </div>
-          <h3 className="text-4xl sm:text-5xl font-bold tracking-tight">
+          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
             Passionate about building scalable digital experiences.
-          </h3>
+          </h2>
           <p className="text-lg leading-relaxed text-muted-foreground">
             Hello! I&apos;m Abdulrahman Moussa. I am a dedicated Frontend
             Developer based in Egypt. I enjoy creating things that live on the

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { siteConfig } from '@/lib/site';
-import { createBilingualPageMetadata } from '@/lib/seo';
+import { createPageMetadata, createBreadcrumbJsonLd } from '@/lib/seo';
 import { certifications, courses, education } from '@/data';
 import Image from 'next/image';
 
@@ -16,13 +16,11 @@ import {
   FaSuitcase,
 } from 'react-icons/fa6';
 
-export const metadata: Metadata = createBilingualPageMetadata({
+export const metadata: Metadata = createPageMetadata({
   title: 'About Abdulrahman Moussa | React & Next.js Frontend Developer',
   path: '/about',
-  descriptionEn:
-    'Learn about Abdulrahman Moussa, a specialized React and Next.js frontend developer. Explore my engineering background, ITI training, ALX software engineering certifications, and design-first development philosophy.',
-  descriptionAr:
-    'تعرف على عبدالرحمن موسى، مطور واجهات أمامية متخصص في React و Next.js. الخبرات، الشهادات من ITI و ALX، التعليم، وفلسفة العمل.',
+  description:
+    'About Abdulrahman Moussa — frontend developer specialized in React and Next.js. My background, ITI and ALX training, certifications, and work approach.',
   ogImage: '/og-about.jpg',
   type: 'profile',
   keywords: [
@@ -65,6 +63,44 @@ const careerGoals = [
   'Open source projects',
 ];
 
+const timeline = [
+  {
+    period: '2024 — Present',
+    title: 'Freelance Frontend Developer',
+    org: 'Client work — Egypt & Saudi Arabia',
+    description:
+      'Shipped production platforms end-to-end: the Manasik System (5 coordinated apps, real payments, 500+ req/s load-tested), Solar Masr, FlowTech, and Mono Form — React, Next.js, and TypeScript.',
+  },
+  {
+    period: 'Mar — Aug 2025',
+    title: 'Intensive Training Program — Frontend & Cross-Platform',
+    org: 'Information Technology Institute (ITI)',
+    description:
+      '4-month intensive track covering JavaScript, modern frontend frameworks, UI/UX, and performance optimization through real-world projects.',
+  },
+  {
+    period: '2023 — 2024',
+    title: 'Software Engineering Program',
+    org: 'ALX Africa',
+    description:
+      '12-month hands-on program focused on problem-solving, algorithms, low-level programming, and collaborative project work.',
+  },
+  {
+    period: '2020 — 2024',
+    title: 'B.Sc. Management Information Systems',
+    org: 'El Obour Institute',
+    description:
+      '4-year degree covering information systems, database design, and software development fundamentals.',
+  },
+  {
+    period: 'Before 2023',
+    title: 'Self-Taught Foundations',
+    org: 'Independent learning',
+    description:
+      'Started with HTML, CSS, and JavaScript — small projects and consistent practice that led to everything after.',
+  },
+];
+
 const hobbies = [
   {
     title: 'Gaming & Entertainment',
@@ -102,7 +138,6 @@ export default function AboutPage() {
   const profileJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',
-    dateCreated: '2025-01-01T00:00:00+00:00',
     dateModified: new Date().toISOString(),
     mainEntity: {
       '@type': 'Person',
@@ -122,10 +157,21 @@ export default function AboutPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(profileJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            createBreadcrumbJsonLd([
+              { name: 'Home', path: '/' },
+              { name: 'About', path: '/about' },
+            ]),
+          ),
+        }}
+      />
       <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[150px] opacity-30 pointer-events-none" />
       <div className="absolute top-[40%] left-[-10%] w-[40%] h-[40%] bg-accent/10 rounded-full blur-[150px] opacity-30 pointer-events-none" />
 
-      <Container className="z-10">
+      <Container className="z-(--z-content)">
         {/* Header Section */}
         <section className="mb-20">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary border border-border text-secondary-foreground font-semibold text-sm mb-6">
@@ -176,6 +222,37 @@ export default function AboutPage() {
               experiences.
             </p>
           </div>
+        </section>
+
+        {/* Experience Timeline */}
+        <section className="mb-24">
+          <div className="flex items-center justify-between gap-4 mb-10">
+            <h2 className="text-4xl font-bold">Journey</h2>
+            <FaSuitcase className="text-2xl text-primary" />
+          </div>
+
+          <ol className="relative border-s-2 border-border ml-3 space-y-12">
+            {timeline.map((item) => (
+              <li key={item.title} className="relative ps-8">
+                <span
+                  aria-hidden="true"
+                  className="absolute -start-2.25 top-1.5 h-4 w-4 rounded-full border-2 border-primary bg-background"
+                />
+                <p className="text-sm font-semibold text-primary mb-1">
+                  {item.period}
+                </p>
+                <h3 className="text-xl sm:text-2xl font-bold text-foreground">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-muted-foreground font-medium mb-2">
+                  {item.org}
+                </p>
+                <p className="text-muted-foreground leading-relaxed max-w-2xl">
+                  {item.description}
+                </p>
+              </li>
+            ))}
+          </ol>
         </section>
 
         {/* Info Grid 1 */}
@@ -393,11 +470,10 @@ export default function AboutPage() {
                     {course.period}
                   </p>
                   <span
-                    className={`text-xs font-semibold px-3 py-1 rounded-full border ${
-                      course.status === 'In Progress'
-                        ? 'bg-warning/15 text-warning border-warning/40'
-                        : 'bg-success/15 text-success border-success/40'
-                    }`}
+                    className={`text-xs font-semibold px-3 py-1 rounded-full border ${course.status === 'In Progress'
+                      ? 'bg-warning/15 text-warning border-warning/40'
+                      : 'bg-success/15 text-success border-success/40'
+                      }`}
                   >
                     {course.status}
                   </span>

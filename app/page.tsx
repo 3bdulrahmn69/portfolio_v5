@@ -1,19 +1,18 @@
 import type { Metadata } from 'next';
 import { siteConfig } from '@/lib/site';
-import { createBilingualPageMetadata } from '@/lib/seo';
+import { createPageMetadata } from '@/lib/seo';
 import Hero from '@/components/landing/hero';
 import About from '@/components/landing/about';
 import TechStack from '@/components/landing/tech-stack';
 import Projects from '@/components/landing/projects';
 import ContactCTA from '@/components/landing/contact-cta';
+import Reveal from '@/components/shared/reveal';
 
-export const metadata: Metadata = createBilingualPageMetadata({
+export const metadata: Metadata = createPageMetadata({
   title: siteConfig.title,
   path: '/',
-  descriptionEn:
-    'Abdulrahman Moussa - Expert Frontend Developer specializing in React, Next.js, and TypeScript. View my portfolio, modern web development projects, and software engineering skills.',
-  descriptionAr:
-    'معرض أعمال عبدالرحمن موسى - مطور واجهات أمامية متخصص في React و Next.js. يضم المشاريع، التقنيات الحديثة، وطرق التواصل.',
+  description:
+    'Frontend developer specializing in React, Next.js, and TypeScript. Explore my projects, skills, and client work — Abdulrahman Moussa.',
   ogImage: '/og-home.jpg',
   keywords: [
     'Abdulrahman Moussa',
@@ -37,10 +36,18 @@ export default function Home() {
       <div className="absolute top-[40%] right-[-10%] w-[30%] h-[30%] bg-accent/20 rounded-full blur-[150px] opacity-20 pointer-events-none" />
 
       <Hero />
-      <About />
-      <TechStack />
-      <Projects />
-      <ContactCTA />
+      <Reveal>
+        <About />
+      </Reveal>
+      <Reveal>
+        <TechStack />
+      </Reveal>
+      <Reveal>
+        <Projects />
+      </Reveal>
+      <Reveal>
+        <ContactCTA />
+      </Reveal>
     </div>
   );
 }

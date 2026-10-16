@@ -1,13 +1,16 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { projects, works } from '@/data';
 import { siteConfig } from '@/lib/site';
 import { createLocaleAlternates } from '@/lib/seo';
 
 import Container from '@/components/layout/container';
-import ProjectActionButtons from '@/components/projects/project-action-buttons';
+import ProjectArchitecture from '@/components/projects/project-architecture';
 import ProjectDemoModal from '@/components/projects/project-demo-modal';
 import ProjectGallery from '@/components/projects/project-gallery';
+import ProjectMetrics from '@/components/projects/project-metrics';
+import ProjectNavigation from '@/components/projects/project-navigation';
 import ProjectTechStack from '@/components/projects/project-tech-stack';
 import Button from '@/components/ui/button';
 
@@ -17,7 +20,9 @@ import {
   FaEnvelope,
   FaGithub,
   FaLayerGroup,
+  FaLightbulb,
   FaLink,
+  FaPuzzlePiece,
 } from 'react-icons/fa6';
 
 const DEFAULT_PROJECT_KEYWORDS = [
@@ -103,12 +108,10 @@ export async function generateMetadata({
     openGraph: {
       title: `${project.title} | Project Details`,
       description: project.description,
-      type: 'article',
+      type: 'website',
       url: projectUrl,
       siteName: siteConfig.name,
       locale: 'en_US',
-      alternateLocale: 'ar_EG',
-      tags: project.tags,
       images: [
         {
           url: imageAbsoluteUrl,
@@ -239,14 +242,14 @@ export default async function ProjectDetails({
         }),
         ...(project.parts &&
           project.parts.length > 0 && {
-            hasPart: project.parts.map((part) => ({
-              '@type': 'SoftwareApplication',
-              name: part.label,
-              ...(part.description && { description: part.description }),
-              ...(part.liveUrl && { url: part.liveUrl }),
-              ...(part.githubUrl && { codeRepository: part.githubUrl }),
-            })),
-          }),
+          hasPart: project.parts.map((part) => ({
+            '@type': 'SoftwareApplication',
+            name: part.label,
+            ...(part.description && { description: part.description }),
+            ...(part.liveUrl && { url: part.liveUrl }),
+            ...(part.githubUrl && { codeRepository: part.githubUrl }),
+          })),
+        }),
       },
     ],
   };
@@ -260,24 +263,34 @@ export default async function ProjectDetails({
       <div className="absolute top-[-8%] right-[-8%] w-[42%] h-[42%] bg-primary/10 rounded-full blur-[150px] opacity-40 pointer-events-none" />
       <div className="absolute top-[45%] left-[-10%] w-[36%] h-[36%] bg-accent/10 rounded-full blur-[150px] opacity-40 pointer-events-none" />
 
-      <Container className="z-10">
+      <Container className="z-(--z-content)">
+        <nav aria-label="Breadcrumb" className="mb-8">
+          <ol className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+            <li>
+              <Link href="/" className="hover:text-foreground transition-colors">
+                Home
+              </Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li>
+              <Link
+                href="/projects"
+                className="hover:text-foreground transition-colors"
+              >
+                Projects
+              </Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" className="text-foreground font-medium">
+              {project.title}
+            </li>
+          </ol>
+        </nav>
+
         <header className="mb-10">
           <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary border border-border text-sm font-semibold text-secondary-foreground mb-6">
             Project Details
           </p>
-
-          {project.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-6">
-              {project.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="text-xs font-medium px-3 py-1.5 text-foreground"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          )}
 
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight mb-5">
             {project.title}
@@ -293,11 +306,16 @@ export default async function ProjectDetails({
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-secondary border border-border text-secondary-foreground">
               {project.status}
             </span>
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-secondary border border-border text-secondary-foreground">
+              {project.category}
+            </span>
           </div>
 
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-4xl leading-relaxed mb-7">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed mb-6">
             {project.description}
           </p>
+
+          {project.metrics && <ProjectMetrics metrics={project.metrics} />}
         </header>
 
         <ProjectGallery
@@ -356,22 +374,42 @@ export default async function ProjectDetails({
           )}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-12">
-          <section className="lg:col-span-2 rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-lg">
-            <h2 className="text-2xl font-black mb-5">Tech Stack</h2>
-            <ProjectTechStack
-              techStack={project.techStack}
-              maxVisible={project.techStack.length}
-            />
+        {(project.challenge || project.solution) && (
+          <section className="mt-12 rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-lg">
+            <div
+              className={`grid grid-cols-1 gap-8 ${project.challenge && project.solution ? 'md:grid-cols-2' : ''}`}
+            >
+              {project.challenge && (
+                <div>
+                  <h2 className="text-2xl font-black mb-4 flex items-center gap-2.5">
+                    <FaPuzzlePiece className="text-primary" /> The Challenge
+                  </h2>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {project.challenge}
+                  </p>
+                </div>
+              )}
+              {project.solution && (
+                <div>
+                  <h2 className="text-2xl font-black mb-4 flex items-center gap-2.5">
+                    <FaLightbulb className="text-primary" /> The Solution
+                  </h2>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {project.solution}
+                  </p>
+                </div>
+              )}
+            </div>
           </section>
+        )}
 
-          <section className="rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-lg">
-            <h2 className="text-2xl font-black mb-5">Category</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              {project.category}
-            </p>
-          </section>
-        </div>
+        <section className="mt-12 rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-lg">
+          <h2 className="text-2xl font-black mb-5">Tech Stack</h2>
+          <ProjectTechStack
+            techStack={project.techStack}
+            maxVisible={project.techStack.length}
+          />
+        </section>
 
         {project.parts && project.parts.length > 0 && (
           <section className="mt-12">
@@ -379,25 +417,56 @@ export default async function ProjectDetails({
               <FaLayerGroup className="text-primary" /> Project Parts
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {project.parts.map((part) => (
-                <article
-                  key={part.label}
-                  className="rounded-2xl border border-border bg-card p-6 shadow-lg flex flex-col"
-                >
-                  <h3 className="text-xl font-bold mb-3">{part.label}</h3>
-                  <p className="text-muted-foreground leading-relaxed mb-5 flex-1">
-                    {part.description || 'Part details will be available soon.'}
-                  </p>
+            <ProjectArchitecture parts={project.parts} />
 
-                  <ProjectActionButtons
-                    title={`${project.title} - ${part.label}`}
-                    liveUrl={part.liveUrl}
-                    githubUrl={part.githubUrl}
-                    showDetails={false}
-                  />
-                </article>
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {project.parts.map((part) => {
+                const Icon = part.icon;
+                return (
+                  <article
+                    key={part.label}
+                    className="rounded-2xl border border-border bg-card p-6 shadow-lg flex flex-col"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="text-xl font-bold flex items-center gap-2.5">
+                        {Icon && <Icon className="text-primary shrink-0" />}
+                        {part.label}
+                      </h3>
+                      {part.liveUrl && (
+                        <Button
+                          href={part.liveUrl}
+                          target="_blank"
+                          variant="outline"
+                          size="sm"
+                          className="shrink-0"
+                        >
+                          <FaLink /> Visit
+                        </Button>
+                      )}
+                    </div>
+                    {part.access && (
+                      <span
+                        className={`mt-2 self-start rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${part.access === 'public'
+                          ? 'bg-primary/15 text-primary'
+                          : 'border border-border bg-secondary text-muted-foreground'
+                          }`}
+                      >
+                        {part.access}
+                      </span>
+                    )}
+                    <p className="text-muted-foreground leading-relaxed my-5 flex-1">
+                      {part.description || 'Part details will be available soon.'}
+                    </p>
+
+                    {part.techStack && part.techStack.length > 0 && (
+                      <ProjectTechStack
+                        techStack={part.techStack}
+                        maxVisible={part.techStack.length}
+                      />
+                    )}
+                  </article>
+                );
+              })}
             </div>
           </section>
         )}
@@ -469,6 +538,21 @@ export default async function ProjectDetails({
             </Button>
           </div>
         </section>
+
+        <ProjectNavigation currentSlug={project.slug} />
+
+        {project.tags.length > 0 && (
+          <div className="mt-10 flex flex-wrap gap-2">
+            {project.tags.map((tag) => (
+              <span
+                key={tag}
+                className="text-xs font-medium px-3 py-1.5 rounded-full bg-secondary border border-border text-secondary-foreground"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
       </Container>
     </div>
   );

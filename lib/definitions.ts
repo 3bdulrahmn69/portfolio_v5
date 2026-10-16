@@ -1,4 +1,5 @@
 import { StaticImageData } from 'next/image';
+import type { IconType } from 'react-icons';
 
 export enum ProjectCategory {
   FRONTEND = 'Front-End Website',
@@ -50,13 +51,33 @@ export enum Technology {
   ZUSTAND = 'Zustand',
   BETTERAUTH = 'BetterAuth',
   REACTQILL = 'React Quill',
+  DOCKER = 'Docker',
+  NGINX = 'Nginx',
+  RESEND = 'Resend',
+  ZOD = 'Zod',
+  EASYKASH = 'Easykash',
+  CLOUDFLARER2 = 'Cloudflare R2',
+  NAPICANVAS = '@napi-rs/canvas',
+  PDFLIB = 'pdf-lib',
 }
+
+export type ProjectPartRole = 'client' | 'core' | 'service';
 
 export type ProjectPart = {
   label: string;
   description?: string;
   liveUrl?: string;
   githubUrl?: string;
+  icon?: IconType;
+  access?: 'public' | 'internal';
+  role?: ProjectPartRole;
+  techStack?: Technology[];
+  subtitle?: string;
+};
+
+export type ProjectMetric = {
+  value: string;
+  label: string;
 };
 
 export type Project = {
@@ -78,6 +99,9 @@ export type Project = {
   demoUrl?: string;
   gallery?: (StaticImageData | string)[];
   parts?: ProjectPart[];
+  metrics?: ProjectMetric[];
+  challenge?: string;
+  solution?: string;
 };
 
 export type Certification = {

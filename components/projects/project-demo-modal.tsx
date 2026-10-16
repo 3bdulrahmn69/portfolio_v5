@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Button from '@/components/ui/button';
 
 import { FaCirclePlay, FaXmark } from 'react-icons/fa6';
@@ -42,8 +42,10 @@ export default function ProjectDemoModal({
 }: ProjectDemoModalProps) {
   const [open, setOpen] = useState(false);
   const embedUrl = useMemo(() => toYouTubeEmbedUrl(demoUrl), [demoUrl]);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
-  // Close on ESC + lock scroll
+  // Close on ESC + lock scroll + move focus into dialog
   useEffect(() => {
     if (!open) return;
 
@@ -53,17 +55,22 @@ export default function ProjectDemoModal({
 
     document.addEventListener('keydown', handleEsc);
     document.body.style.overflow = 'hidden';
+    dialogRef.current?.focus();
 
     return () => {
       document.removeEventListener('keydown', handleEsc);
       document.body.style.overflow = '';
+      previousFocusRef.current?.focus();
     };
   }, [open]);
 
   return (
     <>
       <Button
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          previousFocusRef.current = document.activeElement as HTMLElement;
+          setOpen(true);
+        }}
         variant="secondary"
         size="md"
         className="font-bold "
@@ -72,15 +79,22 @@ export default function ProjectDemoModal({
       </Button>
 
       {open && (
-        <div className="fixed inset-0 z-80 flex items-center justify-center p-4 sm:p-8">
+        <div className="fixed inset-0 z-(--z-modal) flex items-center justify-center p-4 sm:p-8">
           {/* Overlay (separate element) */}
           <div
-            className="absolute inset-0 bg-overlay/75 backdrop-blur-sm animate-in fade-in"
+            className="absolute inset-0 bg-overlay/75 backdrop-blur-sm animate-fade-in"
             onClick={() => setOpen(false)}
           />
 
           {/* Modal */}
-          <div className="relative w-full max-w-5xl rounded-3xl border border-border bg-card shadow-2xl overflow-hidden animate-in zoom-in-95 fade-in">
+          <div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${title} demo video`}
+            tabIndex={-1}
+            className="relative w-full max-w-5xl rounded-3xl border border-border bg-card shadow-2xl overflow-hidden animate-zoom-in outline-none"
+          >
             <div className="flex items-center justify-between px-5 py-4 border-b border-border">
               <p className="text-sm sm:text-base font-semibold text-foreground truncate pr-4">
                 {title} - Demo

@@ -9,9 +9,9 @@ export default function ContactCTA() {
       id="contact"
       className="w-full bg-secondary text-secondary-foreground relative border-t border-border"
     >
-      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.12] pointer-events-none" />
+      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.12] pointer-events-none" />
 
-      <Container className="py-28 sm:py-32 relative z-10">
+      <Container className="py-28 sm:py-32 relative z-(--z-content)">
         <div className="mb-14">
           <h2 className="text-4xl sm:text-6xl font-black mb-5 tracking-tight">
             Let&apos;s Build Something Exceptional.
