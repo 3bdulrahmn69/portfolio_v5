@@ -35,7 +35,7 @@ export default function Reveal({ children, className, delay = 0 }: RevealProps) 
   return (
     <div
       ref={ref}
-      className={cn('reveal', visible && 'reveal-visible', className)}
+      className={cn('reveal w-full', visible && 'reveal-visible', className)}
       style={delay ? { transitionDelay: `${delay}ms` } : undefined}
     >
       {children}
