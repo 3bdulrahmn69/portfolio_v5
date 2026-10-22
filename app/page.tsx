@@ -42,9 +42,7 @@ export default function Home() {
       <Reveal>
         <TechStack />
       </Reveal>
-      <Reveal>
-        <Projects />
-      </Reveal>
+      <Projects />
       <Reveal>
         <ContactCTA />
       </Reveal>

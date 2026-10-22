@@ -3,7 +3,7 @@ export const siteConfig = {
   title: 'Abdulrahman Moussa | React & Next.js Frontend Developer',
   description:
     'Portfolio of Abdulrahman Moussa — frontend developer building fast, accessible web applications with React, Next.js, and TypeScript.',
-  url: 'https://3bdulrahmn.vercel.app',
+  url: 'https://abdulrahmanmoussa.vercel.app',
   email: 'abdulrahman.moussa.dev@gmail.com',
   phone: '+20 101 832 6780',
   location: 'Cairo, Egypt',
@@ -12,27 +12,27 @@ export const siteConfig = {
   socialLinks: [
     {
       label: 'GitHub',
-      href: 'https://github.com/3bdulrahmn69',
+      href: 'https://github.com/abdulrahmonssa',
     },
     {
       label: 'LinkedIn',
-      href: 'https://www.linkedin.com/in/3bdulrahmn69',
+      href: 'https://www.linkedin.com/in/abdulrahmonssa',
     },
     {
       label: 'Medium',
-      href: 'https://medium.com/@3bdulrahmn69',
+      href: 'https://medium.com/@abdulrahmonssa',
     },
     {
       label: 'Twitter',
-      href: 'https://twitter.com/3bdulrahmn69',
+      href: 'https://twitter.com/abdulrahmonssa',
     },
     {
       label: 'Facebook',
-      href: 'https://www.facebook.com/3bdulrahmn69',
+      href: 'https://www.facebook.com/abdulrahmonssa',
     },
     {
       label: 'Instagram',
-      href: 'https://www.instagram.com/3bdulrahmn69',
+      href: 'https://www.instagram.com/abdulrahmonssa',
     },
   ],
 } as const;

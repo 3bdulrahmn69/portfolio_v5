@@ -123,8 +123,8 @@ export async function generateMetadata({
       title: `${project.title} | Abdulrahman Moussa`,
       card: 'summary_large_image',
       description: project.description,
-      creator: '@3bdulrahmn69',
-      site: '@3bdulrahmn69',
+      creator: '@abdulrahmonssa',
+      site: '@abdulrahmonssa',
       images: [imageAbsoluteUrl],
     },
   };

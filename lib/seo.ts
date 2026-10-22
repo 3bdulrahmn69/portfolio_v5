@@ -92,8 +92,8 @@ export function createPageMetadata({
       title,
       description,
       images: [absoluteOgImage],
-      site: '@3bdulrahmn69',
-      creator: '@3bdulrahmn69',
+      site: '@abdulrahmonssa',
+      creator: '@abdulrahmonssa',
     },
     other: GEO_META,
   };
